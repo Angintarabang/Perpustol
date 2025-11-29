@@ -20,6 +20,16 @@ body{
     background-color: var(--color-background-dark); /* Background Gelap Total */
 }
 
+/* Sembunyikan tabel duplikat */
+#content table + table {
+    display: none;
+}
+
+/* Atau sembunyikan elemen tertentu berdasarkan class */
+.duplicate-table {
+    display: none;
+}
+
 .pagination {
   display: inline-block;
 }

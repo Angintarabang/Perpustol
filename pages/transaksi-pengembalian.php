@@ -10,6 +10,11 @@ include "koneksi.php";
     <a href="index.php?p=transaksi-pengembalian-input" class="tombol">Tambah Pengembalian</a>
 </div>
 
+<form method="post">
+    <input type="text" name="pencarian" placeholder="Cari ID/Anggota/Buku">
+    <input type="submit" name="search" value="search" class="tombol">
+</form>
+
 <table id="tabel-tampil">
 <tr>
     <th>No</th>
@@ -24,6 +29,8 @@ include "koneksi.php";
 </tr>
 
 <?php
+
+// tampilkan data pengembalian
 $sql = "SELECT * FROM tbpengembalian ORDER BY idpengembalian DESC";
 $query = mysqli_query($db, $sql);
 
@@ -31,58 +38,49 @@ $nomor = 1;
 
 while ($data = mysqli_fetch_array($query)) {
 
-    $idanggota  = $data['idanggota'];
-    $idbuku     = $data['idbuku'];
-    $tglkembali = $data['tglkembali'];
-
-    // Ambil tanggal pinjam dari tbtransaksi
-    $queryPinjam = mysqli_query($db,
-        "SELECT tglpinjam FROM tbtransaksi 
-         WHERE idanggota='$idanggota' AND idbuku='$idbuku'"
+    // ambil data peminjaman dari tbtransaksi
+    $qpinjam = mysqli_query($db, 
+        "SELECT * FROM tbtransaksi 
+         WHERE idanggota='$data[idanggota]' 
+         AND idbuku='$data[idbuku]'"
     );
 
-    $pinjam = mysqli_fetch_array($queryPinjam);
-    $tglpinjam = $pinjam['tglpinjam'] ?? "-";
+    $pinjam = mysqli_fetch_array($qpinjam);
 
-    // Hitung keterlambatan
-    if ($tglpinjam != "-") {
-        $start = strtotime($tglpinjam);
-        $end   = strtotime($tglkembali);
-        $selisih = floor(($end - $start) / (60*60*24));
+    $tgl_pinjam = $pinjam['tglpinjam'];
+    $tgl_kembali = $data['tglkembali'];
 
-        // ambil pengaturan denda
-        $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting=1");
-        $d = mysqli_fetch_array($set);
+    // hitung selisih
+    $selisih_hari = (strtotime($tgl_kembali) - strtotime($tgl_pinjam)) / (60*60*24);
 
-        $maks_hari = $d['maks_hari_pinjam'];
+    // ambil aturan denda
+    $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting=1");
+    $d = mysqli_fetch_array($set);
 
-        if ($selisih > $maks_hari) {
-            $telat = $selisih - $maks_hari;
-        } else {
-            $telat = 0;
-        }
-    } else {
-        $telat = 0;
-    }
+    $maks_pinjam = $d['maks_hari_pinjam'];
+    $denda_per_hari = $d['denda_per_hari'];
+
+    // hitung keterlambatan
+    $telat = max(0, $selisih_hari - $maks_pinjam);
 ?>
 <tr>
     <td><?= $nomor++; ?></td>
     <td><?= $data['idpengembalian']; ?></td>
-    <td><?= $idanggota; ?></td>
-    <td><?= $idbuku; ?></td>
-    <td><?= $tglpinjam; ?></td>
-    <td><?= $tglkembali; ?></td>
+    <td><?= $data['idanggota']; ?></td>
+    <td><?= $data['idbuku']; ?></td>
+    <td><?= $tgl_pinjam; ?></td>
+    <td><?= $tgl_kembali; ?></td>
     <td><?= $telat; ?> hari</td>
     <td>Rp <?= number_format($data['denda'], 0, ',', '.'); ?></td>
 
     <td>
         <a class="tombol" 
-        href="pages/transaksi-pengembalian-hapus.php?id=<?= $data['idpengembalian']; ?>" 
-        onclick="return confirm('Hapus data ini?')">
-        Hapus</a>
+           href="pages/transaksi-pengembalian-hapus.php?id=<?= $data['idpengembalian']; ?>" 
+           onclick="return confirm('Hapus data ini?')">
+           Hapus
+        </a>
     </td>
 </tr>
-
 <?php } ?>
 </table>
 
