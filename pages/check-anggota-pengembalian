@@ -1,0 +1,152 @@
+<?php
+include "koneksi.php";
+?>
+
+<div id="label-page"><h3>Laporan Anggota yang Melakukan Pengembalian</h3></div>
+
+<div id="content">
+
+<?php
+// Query untuk mendapatkan statistik pengembalian per anggota
+$sql = "SELECT 
+        a.idanggota,
+        a.nama,
+        a.jeniskelamin,
+        a.alamat,
+        COUNT(p.idpengembalian) as total_pengembalian,
+        SUM(p.denda) as total_denda,
+        MAX(p.tglkembali) as terakhir_kembali
+        FROM tbanggota a
+        LEFT JOIN tbpengembalian p ON a.idanggota = p.idanggota
+        GROUP BY a.idanggota
+        HAVING total_pengembalian > 0
+        ORDER BY total_pengembalian DESC";
+
+$query = mysqli_query($db, $sql);
+
+if(mysqli_num_rows($query) > 0) {
+?>
+<table id="tabel-tampil">
+    <tr>
+        <th>No</th>
+        <th>ID Anggota</th>
+        <th>Nama</th>
+        <th>Jenis Kelamin</th>
+        <th>Alamat</th>
+        <th>Total Pengembalian</th>
+        <th>Total Denda</th>
+        <th>Terakhir Kembali</th>
+    </tr>
+    
+    <?php
+    $nomor = 1;
+    $total_keseluruhan = 0;
+    $total_denda_keseluruhan = 0;
+    
+    while ($data = mysqli_fetch_array($query)) {
+        $total_keseluruhan += $data['total_pengembalian'];
+        $total_denda_keseluruhan += $data['total_denda'];
+    ?>
+    <tr>
+        <td><?= $nomor++; ?></td>
+        <td><?= htmlspecialchars($data['idanggota']); ?></td>
+        <td><?= htmlspecialchars($data['nama']); ?></td>
+        <td><?= htmlspecialchars($data['jeniskelamin']); ?></td>
+        <td><?= htmlspecialchars($data['alamat']); ?></td>
+        <td style="text-align: center; font-weight: bold;">
+            <?= $data['total_pengembalian']; ?>
+        </td>
+        <td style="color: <?= $data['total_denda'] > 0 ? 'red' : 'green'; ?>; font-weight: bold;">
+            Rp <?= number_format($data['total_denda'], 0, ',', '.'); ?>
+        </td>
+        <td><?= $data['terakhir_kembali'] ? htmlspecialchars($data['terakhir_kembali']) : '-'; ?></td>
+    </tr>
+    <?php } ?>
+    
+    <tr style="background-color: #f0f0f0; font-weight: bold;">
+        <td colspan="5" style="text-align: right;">TOTAL:</td>
+        <td style="text-align: center;"><?= $total_keseluruhan; ?></td>
+        <td style="color: red;">Rp <?= number_format($total_denda_keseluruhan, 0, ',', '.'); ?></td>
+        <td></td>
+    </tr>
+</table>
+
+<?php
+} else {
+    echo "<p style='text-align:center; padding:20px;'>Belum ada anggota yang melakukan pengembalian</p>";
+}
+?>
+
+<!-- Detail Pengembalian per Anggota -->
+<h3 style="margin-top: 30px;">Detail Pengembalian per Anggota</h3>
+
+<?php
+// Query untuk detail per anggota
+$sql_detail = "SELECT 
+               p.idpengembalian,
+               p.idanggota,
+               a.nama as nama_anggota,
+               p.idbuku,
+               b.judulbuku,
+               p.tglkembali,
+               p.denda,
+               t.tglpinjam
+               FROM tbpengembalian p
+               JOIN tbanggota a ON p.idanggota = a.idanggota
+               JOIN tbbuku b ON p.idbuku = b.idbuku
+               LEFT JOIN tbtransaksi t ON p.idanggota = t.idanggota AND p.idbuku = t.idbuku
+               ORDER BY p.idanggota, p.tglkembali DESC";
+
+$query_detail = mysqli_query($db, $sql_detail);
+
+if(mysqli_num_rows($query_detail) > 0) {
+    
+    $current_anggota = '';
+    $counter = 0;
+    
+    while ($data = mysqli_fetch_array($query_detail)) {
+        
+        if($current_anggota != $data['idanggota']) {
+            if($current_anggota != '') {
+                echo "</table><br>";
+            }
+            
+            $current_anggota = $data['idanggota'];
+            $counter++;
+?>
+<h4><?= $counter; ?>. <?= htmlspecialchars($data['idanggota']); ?> - <?= htmlspecialchars($data['nama_anggota']); ?></h4>
+<table id="tabel-tampil" style="margin-bottom: 20px;">
+    <tr>
+        <th>No</th>
+        <th>ID Pengembalian</th>
+        <th>Buku</th>
+        <th>Tanggal Pinjam</th>
+        <th>Tanggal Kembali</th>
+        <th>Denda</th>
+    </tr>
+<?php
+            $sub_nomor = 1;
+        }
+?>
+    <tr>
+        <td><?= $sub_nomor++; ?></td>
+        <td><?= htmlspecialchars($data['idpengembalian']); ?></td>
+        <td>
+            <strong><?= htmlspecialchars($data['idbuku']); ?></strong><br>
+            <?= htmlspecialchars($data['judulbuku']); ?>
+        </td>
+        <td><?= $data['tglpinjam'] ? htmlspecialchars($data['tglpinjam']) : '-'; ?></td>
+        <td><?= htmlspecialchars($data['tglkembali']); ?></td>
+        <td style="color: <?= $data['denda'] > 0 ? 'red' : 'green'; ?>; font-weight: bold;">
+            Rp <?= number_format($data['denda'], 0, ',', '.'); ?>
+        </td>
+    </tr>
+<?php
+    }
+    echo "</table>";
+} else {
+    echo "<p style='text-align:center; padding:20px;'>Tidak ada data detail pengembalian</p>";
+}
+?>
+
+</div>
