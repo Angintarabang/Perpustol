@@ -139,6 +139,19 @@ INSERT INTO `tbuser` (`iduser`, `nama`, `alamat`, `password`) VALUES
 -- Indexes for dumped tables
 --
 
+-- Buat tabel setting denda
+CREATE TABLE IF NOT EXISTS tbdenda (
+  id_setting INT PRIMARY KEY AUTO_INCREMENT,
+  denda_per_hari INT DEFAULT 5000,
+  maks_hari_pinjam INT DEFAULT 7,
+  maks_denda INT DEFAULT 50000
+);
+
+-- Insert data default
+INSERT INTO tbdenda (denda_per_hari, maks_hari_pinjam, maks_denda) 
+VALUES (5000, 7, 50000);
+
+
 --
 -- Indexes for table `tbanggota`
 --
