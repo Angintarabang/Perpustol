@@ -40,6 +40,11 @@ if(isset($_SESSION['sesi'])){
 				<li><a href="index.php?p=transaksi-peminjaman">Transaksi Peminjaman</a></li>
 				<li><a href="index.php?p=transaksi-pengembalian">Transaksi Pengembalian</a></li>
 			</ul>
+			<p class="label-navigasi">Laporan & Denda</p>
+    <ul>
+        <li><a href="index.php?p=laporan-transaksi">Laporan Transaksi</a></li>
+        <li><a href="index.php?p=denda">Manajemen Denda</a></li>
+    </ul>
 			<p class="label-navigasi" style="color: white;"><a href="index.php?p=transaksi-peminjaman"  style="color: white;">Laporan Transaksi</a></p>
 			<a href="logout.php">Logout</a>
 		</div>
