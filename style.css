@@ -1,10 +1,25 @@
-*{margin:0px; padding:0px}
+:root {
+    /* Tema Gelap & Elegan (Library of Chaos) */
+    --color-background-dark: #121212; /* Hampir Hitam */
+    --color-primary-accent: #BB86FC;  /* Eclipse Blue/Purple Accent (Elegansi) */
+    --color-text-light: #E0E0E0;      /* Teks Cerah */
+    --color-secondary-dark: #292929;  /* Warna untuk Sidebar/Header, lebih gelap sedikit */
+    --color-error: #CF6679;           /* Warna Merah untuk Error/Peringatan */
+}
+
+*{
+    margin:0px;
+    padding:0px;
+    box-sizing: border-box; /* PENTING! Agar padding & border tidak menambah ukuran */
+}
 /**--Awal index--**/
 body{
 	font-family:sans-serif;
-	font-size:13px;
-	color:blue;
+	font-size:16px; /* Naikkan sedikit agar mudah dibaca */
+	color: var(--color-text-light); /* Teks dasar cerah */
+    background-color: var(--color-background-dark); /* Background Gelap Total */
 }
+
 .pagination {
   display: inline-block;
 }
@@ -33,13 +48,12 @@ body{
 #container{
 	width:99%;
 	margin:0px auto;
-	border:2px solid #919191;
-	background-color:#643838;
+	background-color:var(--color-background-dark);
 }
 #header{
 	width:100%;
 	height:100px;
-	background-color:#C4C4C4;
+	background-color: var(--color-secondary-dark);
 }
 #logo-perpustakaan-container{
 	float:left;
@@ -66,8 +80,9 @@ body{
 #header2{
 	width:100%;
 	height:32px;
-	background-color:#5C3701;
-	color:#FFFFFF;
+	background-color: var(--color-primary-accent);
+	color: var(--color-background-dark);
+    font-weight: bold;
 }
 #nama-user{
 	float:left;
@@ -77,29 +92,32 @@ body{
 #sidebar{
 	float:left;
 	width:15.8%;
+	background-color: var(--color-secondary-dark); 
+    min-height: 500px; /* Agar sidebar gak pendek sendiri */
 }
 #sidebar ul{
 	list-style:none;
 }
 #sidebar a:link, #sidebar a:visited{
-	color:black;
+	color: var(--color-text-light);
 	text-decoration:none;
 	display:block;
-	padding:6px;
+	padding:8px 10px;
 }
 #sidebar a:hover{
-	background-color:#919191;
+	background-color: #383838;
+	color: var(--color-primary-accent)
 }
 .label-navigasi{
-	background-color:#5C3701;
+	background-color:var(--color-primary-accent);
 	padding:6px;
-	color:white;
+	color:var(--color-background-dark);
 	font-weight:bold;
 }
 #content-container{
 	float:left;
 	width:83.8%;
-	background-color:#9f4f4f;
+	background-color:var(--color-background-dark);
 }
 #footer{
 	width:99.4%;
@@ -107,8 +125,8 @@ body{
 	clear:both;
 	text-align:center;
 	padding:4px;
-	background-color:#5C3701;
-	color:#873737;
+	background-color:var(--coolor-secondary-dark);
+	color:var(--color-text-light);
 }
 /**--Akhir index.php--**/
 
@@ -129,6 +147,7 @@ body{
 	border:2px solid #C4C4C4;
 	padding:10px;
 	margin-bottom:6px;
+	background-color: var(--color-secondary-dark);
 }
 #beranda-judul{
 	text-align:center;
@@ -137,7 +156,12 @@ body{
 #beranda-konten{
 	text-align:center;
 	padding-top:140px;
-	color:red;
+	color:var(--color-secondary-dark);
+	font-size:2em;
+}
+
+#beranda-konten + p {
+	color: var(--color-error);
 }
 .tombol{
 	border-radius:4px;
