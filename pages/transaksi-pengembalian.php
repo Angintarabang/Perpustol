@@ -27,6 +27,12 @@ include "koneksi.php";
 $sql = "SELECT * FROM tbpengembalian ORDER BY idpengembalian DESC";
 $query = mysqli_query($db, $sql);
 
+// --- Pengecekan Query Utama ---
+if (!$query) {
+    // Jika query gagal, tampilkan pesan error SQL
+    die("Query Gagal: " . mysqli_error($db));
+}
+
 $nomor = 1;
 
 while ($data = mysqli_fetch_array($query)) {
@@ -41,28 +47,50 @@ while ($data = mysqli_fetch_array($query)) {
          WHERE idanggota='$idanggota' AND idbuku='$idbuku'"
     );
 
-    $pinjam = mysqli_fetch_array($queryPinjam);
-    $tglpinjam = $pinjam['tglpinjam'] ?? "-";
-
-    // Hitung keterlambatan
-    if ($tglpinjam != "-") {
+    // --- Pengecekan Query Pinjam ---
+    if (!$queryPinjam) {
+        $tglpinjam = "Error mengambil data pinjam";
+        $telat = 0;
+        $pinjam = false;
+    } else {
+        $pinjam = mysqli_fetch_array($queryPinjam);
+        $tglpinjam = $pinjam['tglpinjam'] ?? "-";
+    }
+    
+    // Inisialisasi variabel telat dan denda sementara
+    $telat = 0;
+    
+    // Hitung keterlambatan (hanya jika data pinjam berhasil diambil)
+    if ($tglpinjam != "-" && $pinjam !== false) {
         $start = strtotime($tglpinjam);
         $end   = strtotime($tglkembali);
-        $selisih = floor(($end - $start) / (60*60*24));
+        // Pastikan konversi tanggal berhasil (jika salah satu tanggal invalid, strtotime bisa mengembalikan false)
+        if ($start !== false && $end !== false) {
+            $selisih = floor(($end - $start) / (60*60*24));
 
-        // ambil pengaturan denda
-        $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting=1");
-        $d = mysqli_fetch_array($set);
+            // ambil pengaturan denda
+            $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting=1");
+            
+            // --- Pengecekan Query Denda ---
+            if (!$set) {
+                 // Jika gagal ambil setting denda
+                 $maks_hari = 7; // nilai default jika query gagal
+            } else {
+                 $d = mysqli_fetch_array($set);
+                 $maks_hari = $d['maks_hari_pinjam'] ?? 7; // default 7 jika kolom tidak ada
+            }
 
-        $maks_hari = $d['maks_hari_pinjam'];
 
-        if ($selisih > $maks_hari) {
-            $telat = $selisih - $maks_hari;
+            if ($selisih > $maks_hari) {
+                $telat = $selisih - $maks_hari;
+            } else {
+                $telat = 0;
+            }
         } else {
+            // Jika konversi tanggal gagal
             $telat = 0;
+            $tglpinjam = "Tgl Invalid";
         }
-    } else {
-        $telat = 0;
     }
 ?>
 <tr>

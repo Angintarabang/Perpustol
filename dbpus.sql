@@ -128,6 +128,31 @@ CREATE TABLE `tbuser` (
   `password` varchar(8) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbpengembalian`
+--
+
+CREATE TABLE `tbpengembalian` (
+  `idpengembalian` VARCHAR(10) NOT NULL,
+  `idtransaksi` VARCHAR(5) NOT NULL, -- Kunci Asing ke tbtransaksi
+  `idanggota` VARCHAR(5) NOT NULL,    -- Kunci Asing ke tbanggota
+  `idbuku` VARCHAR(5) NOT NULL,       -- Kunci Asing ke tbbuku
+  `tglkembali` DATE NOT NULL,
+  `terlambat` INT(3) DEFAULT 0,
+  `denda` INT(11) DEFAULT 0,
+  
+  -- Definisikan Kunci Utama untuk tabel pengembalian
+  PRIMARY KEY (`idpengembalian`),
+  
+  -- Definisikan Kunci Asing
+  FOREIGN KEY (`idtransaksi`) REFERENCES `tbtransaksi`(`idtransaksi`),
+  FOREIGN KEY (`idanggota`) REFERENCES `tbanggota`(`idanggota`),
+  FOREIGN KEY (`idbuku`) REFERENCES `tbbuku`(`idbuku`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 --
 -- Dumping data for table `tbuser`
 --
@@ -141,11 +166,11 @@ INSERT INTO `tbuser` (`iduser`, `nama`, `alamat`, `password`) VALUES
 
 -- Buat tabel setting denda
 CREATE TABLE IF NOT EXISTS tbdenda (
-  id_setting INT PRIMARY KEY AUTO_INCREMENT,
-  denda_per_hari INT DEFAULT 5000,
-  maks_hari_pinjam INT DEFAULT 7,
-  maks_denda INT DEFAULT 50000
-);
+  'id_setting' INT PRIMARY KEY AUTO_INCREMENT,
+  'denda_per_hari' INT DEFAULT 5000,
+  'maks_hari_pinjam' INT DEFAULT 7,
+  'maks_denda' INT DEFAULT 50000
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Insert data default
 INSERT INTO tbdenda (denda_per_hari, maks_hari_pinjam, maks_denda) 

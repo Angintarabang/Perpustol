@@ -106,7 +106,7 @@ body{
 }
 #sidebar a:hover{
 	background-color: #383838;
-	color: var(--color-primary-accent)
+	color: var(--color-primary-accent);
 }
 .label-navigasi{
 	background-color:var(--color-primary-accent);
