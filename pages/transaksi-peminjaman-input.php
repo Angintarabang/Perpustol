@@ -1,5 +1,21 @@
 <?php
 include "koneksi.php";
+
+// -------------------------
+// Generate ID Transaksi Otomatis
+// -------------------------
+$query = mysqli_query($db, "SELECT MAX(idtransaksi) AS maxID FROM tbtransaksi");
+$data = mysqli_fetch_array($query);
+$lastID = $data['maxID'];  // contoh: TR031
+
+if ($lastID) {
+    $urutan = (int) substr($lastID, 2, 3); // ambil 031 → jadi 31
+    $urutan++;                             // +1
+    $idBaru = "TR" . sprintf("%03d", $urutan);
+} else {
+    // jika tabel masih kosong
+    $idBaru = "TR001";
+}
 ?>
 
 <div id="label-page"><h3>Input Transaksi Peminjaman</h3></div>
@@ -10,8 +26,9 @@ include "koneksi.php";
 <table id="tabel-input">
     <tr>
         <td>ID Transaksi</td>
-        <td><input type="text" name="idtransaksi" required></td>
+        <td><input type="text" name="idtransaksi" value="<?= $idBaru; ?>" readonly></td>
     </tr>
+
     <tr>
         <td>ID Anggota</td>
         <td>
@@ -19,9 +36,11 @@ include "koneksi.php";
                 <option value="">Pilih Anggota</option>
                 <?php
                 $anggota = mysqli_query($db, "SELECT * FROM tbanggota");
-                while($a = mysqli_fetch_array($anggota)){
+                while ($a = mysqli_fetch_array($anggota)) {
                 ?>
-                <option value="<?= $a['idanggota']; ?>"><?= $a['idanggota']; ?> - <?= $a['nama']; ?></option>
+                    <option value="<?= $a['idanggota']; ?>">
+                        <?= $a['idanggota']; ?> - <?= $a['nama']; ?>
+                    </option>
                 <?php } ?>
             </select>
         </td>
@@ -33,10 +52,12 @@ include "koneksi.php";
             <select name="idbuku" required>
                 <option value="">Pilih Buku</option>
                 <?php
-                $buku = mysqli_query($db, "SELECT * FROM tbbuku WHERE status = 'Tersedia'");
-                while($b = mysqli_fetch_array($buku)){
+                $buku = mysqli_query($db, "SELECT * FROM tbbuku WHERE status='Tersedia'");
+                while ($b = mysqli_fetch_array($buku)) {
                 ?>
-                <option value="<?= $b['idbuku']; ?>"><?= $b['idbuku']; ?> - <?= $b['judulbuku']; ?></option>
+                    <option value="<?= $b['idbuku']; ?>">
+                        <?= $b['idbuku']; ?> - <?= $b['judulbuku']; ?>
+                    </option>
                 <?php } ?>
             </select>
         </td>
@@ -65,7 +86,10 @@ if (isset($_POST['simpan'])) {
         '$_POST[idanggota]',
         '$_POST[idbuku]',
         '$_POST[tglpinjam]',
-        '$_POST[tglkembali]'
+        '$_POST[tglkembali]',
+        'Belum Kembali',        -- status default
+        0,                      -- denda default
+        DATE_ADD('$_POST[tglpinjam]', INTERVAL 7 DAY)  -- otomatis set batas waktu
     )");
 
     // Update status buku menjadi Dipinjam
