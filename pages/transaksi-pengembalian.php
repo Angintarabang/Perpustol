@@ -47,21 +47,24 @@ while ($data = mysqli_fetch_array($query)) {
 
     $pinjam = mysqli_fetch_array($qpinjam);
 
-    $tgl_pinjam = $pinjam['tglpinjam'];
+    // Jika tidak ada data pinjam → tampil "-"
+    $tgl_pinjam = $pinjam['tglpinjam'] ?? "-";
     $tgl_kembali = $data['tglkembali'];
 
-    // hitung selisih
-    $selisih_hari = (strtotime($tgl_kembali) - strtotime($tgl_pinjam)) / (60*60*24);
+    // Hitung keterlambatan hanya jika data pinjam ada
+    if ($tgl_pinjam != "-") {
+        $selisih_hari = (strtotime($tgl_kembali) - strtotime($tgl_pinjam)) / (60*60*24);
 
-    // ambil aturan denda
-    $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting=1");
-    $d = mysqli_fetch_array($set);
+        // ambil aturan denda
+        $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting=1");
+        $d = mysqli_fetch_array($set);
 
-    $maks_pinjam = $d['maks_hari_pinjam'];
-    $denda_per_hari = $d['denda_per_hari'];
+        $maks_pinjam = $d['maks_hari_pinjam'];
 
-    // hitung keterlambatan
-    $telat = max(0, $selisih_hari - $maks_pinjam);
+        $telat = max(0, $selisih_hari - $maks_pinjam);
+    } else {
+        $telat = 0;
+    }
 ?>
 <tr>
     <td><?= $nomor++; ?></td>
