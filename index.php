@@ -8,7 +8,7 @@ if (isset($_SESSION['sesi'])) {
 <!doctype html>
 <html>
 <head>
-    <title>Sistem Informasi Perpustakaan</title>
+    <title>KERAJAAN YOHANES</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -21,10 +21,10 @@ if (isset($_SESSION['sesi'])) {
             </div>
             <div id="nama-alamat-perpustakaan-container">
                 <div class="nama-alamat-perpustakaan">
-                    <h1> PERPUSTAKAAN UMUM </h1>
+                    <h1> PERPUSTAKAAN CHAOS YOHANES </h1>
                 </div>
                 <div class="nama-alamat-perpustakaan">
-                    <h4>Jl. Lembah Abang No 11, Telp: (021)55555555</h4>
+                    <h4>jl simpang karue rumah yohanes</h4>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@ if (isset($_SESSION['sesi'])) {
             </ul>
 
             <!-- LABEL SAJA, TIDAK BISA DIKLIK -->
-            <p class="label-navigasi">Laporan Transaksi</p>
+            <p class="label-navigasi">YOHANES</p>
 
             <a href="logout.php">Logout</a>
         </div>
@@ -87,7 +87,7 @@ if (isset($_SESSION['sesi'])) {
         </div>
 
         <div id="footer">
-            <h3>Sistem Informasi Perpustakaan (sipus) | Praktikum</h3>
+            <h3> WEB PROJECT SBD| Praktikum</h3>
         </div>
 
     </div>
