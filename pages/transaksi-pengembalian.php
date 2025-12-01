@@ -34,32 +34,37 @@ $sql = "SELECT p.*, a.nama as nama_anggota, a.jeniskelamin, b.judulbuku, t.tglpi
 
 $query = mysqli_query($db, $sql);
 
-if(mysqli_num_rows($query) > 0) {
-    $nomor = 1;
+$nomor = 1;
 
-    while ($data = mysqli_fetch_array($query)) {
-        $tgl_pinjam = $data['tglpinjam'];
-        $tgl_kembali = $data['tglkembali'];
+while ($data = mysqli_fetch_array($query)) {
 
-        // Hitung selisih hari
-        if($tgl_pinjam && $tgl_kembali) {
-            $selisih_hari = (strtotime($tgl_kembali) - strtotime($tgl_pinjam)) / (60*60*24);
-            
-            // ambil aturan denda
-            $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting=1");
-            if(mysqli_num_rows($set) > 0) {
-                $d = mysqli_fetch_array($set);
-                $maks_pinjam = $d['maks_hari_pinjam'];
-                $denda_per_hari = $d['denda_per_hari'];
-                
-                // hitung keterlambatan
-                $telat = max(0, $selisih_hari - $maks_pinjam);
-            } else {
-                $telat = 0;
-            }
-        } else {
-            $telat = 0;
-        }
+    // ambil data peminjaman dari tbtransaksi
+    $qpinjam = mysqli_query($db, 
+        "SELECT * FROM tbtransaksi 
+         WHERE idanggota='$data[idanggota]' 
+         AND idbuku='$data[idbuku]'"
+    );
+
+    $pinjam = mysqli_fetch_array($qpinjam);
+
+    // Jika tidak ada data pinjam → tampil "-"
+    $tgl_pinjam = $pinjam['tglpinjam'] ?? "-";
+    $tgl_kembali = $data['tglkembali'];
+
+    // Hitung keterlambatan hanya jika data pinjam ada
+    if ($tgl_pinjam != "-") {
+        $selisih_hari = (strtotime($tgl_kembali) - strtotime($tgl_pinjam)) / (60*60*24);
+
+        // ambil aturan denda
+        $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting=1");
+        $d = mysqli_fetch_array($set);
+
+        $maks_pinjam = $d['maks_hari_pinjam'];
+
+        $telat = max(0, $selisih_hari - $maks_pinjam);
+    } else {
+        $telat = 0;
+    }
 ?>
 <tr>
     <td><?= $nomor++; ?></td>
