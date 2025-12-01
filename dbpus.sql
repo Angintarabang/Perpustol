@@ -135,6 +135,22 @@ CREATE TABLE `tbuser` (
 INSERT INTO `tbuser` (`iduser`, `nama`, `alamat`, `password`) VALUES
 ('jwd', 'Andi Rahman Hakim', 'Jl.Pramuka No 9', '1234');
 
+
+CREATE TABLE `tbpengembalian` (
+  `idpengembalian` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `idanggota` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `idbuku` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `tglkembali` date NOT NULL,
+  `denda` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Menambahkan Primary Key
+ALTER TABLE `tbpengembalian`
+  ADD PRIMARY KEY (`idpengembalian`);
+
+ALTER TABLE `tbpengembalian`
+ADD COLUMN `idtransaksi` VARCHAR(20) NULL AFTER `idbuku`;
+
 --
 -- Indexes for dumped tables
 --
