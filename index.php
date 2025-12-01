@@ -39,7 +39,7 @@ if (isset($_SESSION['sesi'])) {
 
             <a href="index.php?p=beranda">Beranda</a>
 
-            <p class="label-navigasi">Data Master</p>
+            <p class="label-navigasi">Data Anggota & Buku</p>
             <ul>
                 <li><a href="index.php?p=anggota">Data Anggota</a></li>
                 <li><a href="index.php?p=buku">Data Buku</a></li>
@@ -58,7 +58,11 @@ if (isset($_SESSION['sesi'])) {
             </ul>
 
             <!-- LABEL SAJA, TIDAK BISA DIKLIK -->
+<<<<<<< HEAD
             <p class="label-navigasi">YOHANES</p>
+=======
+            <p class="label-navigasi">Keluar</p>
+>>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
 
             <a href="logout.php">Logout</a>
         </div>

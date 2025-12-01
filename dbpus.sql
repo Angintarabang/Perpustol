@@ -5,6 +5,12 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+<<<<<<< HEAD
+=======
+-- Pastikan database yang benar digunakan (HANYA JIKA ANDA TIDAK MENGIMPOR LANGSUNG)
+-- USE dbpus; 
+
+>>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -19,11 +25,22 @@ CREATE TABLE `tbanggota` (
   `nama` varchar(30) NOT NULL,
   `jeniskelamin` varchar(10) NOT NULL,
   `alamat` varchar(40) NOT NULL,
+<<<<<<< HEAD
   `nohp` varchar(15) DEFAULT NULL, -- DITAMBAHKAN
+=======
+  `nohp` varchar(15) DEFAULT NULL, -- KOLOM TAMBAHAN UNTUK nohp
+>>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
   `status` varchar(20) NOT NULL,
   `foto` varchar(35) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+<<<<<<< HEAD
+=======
+--
+-- Dumping data for table `tbanggota`
+--
+
+>>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
 INSERT INTO `tbanggota` (`idanggota`, `nama`, `jeniskelamin`, `alamat`, `nohp`, `status`, `foto`) VALUES
 ('AG002', 'Aini Rahmawati', 'Wanita', 'Jl.Anggrek No 45', NULL, 'Sedang Meminjam', 'AG002.jpg'),
 ('AG003', 'Rudi Hartono', 'Pria', 'Jl.Manggis 98', NULL, 'Sedang Meminjam', ''),
@@ -66,7 +83,11 @@ INSERT INTO `tbbuku` (`idbuku`, `judulbuku`, `kategori`, `pengarang`, `penerbit`
 ('BK013', 'Dermaga Biru', 'Karya Sastra', 'Sutejo', 'Media Cipta', 'Tersedia');
 
 --
+<<<<<<< HEAD
 -- Table structure for table `tbtransaksi` (UPGRADED: Menambahkan status_pengembalian & denda)
+=======
+-- Table structure for table `tbtransaksi` (UPGRADED: Menambahkan status_pengembalian)
+>>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
 --
 
 CREATE TABLE `tbtransaksi` (
@@ -75,6 +96,7 @@ CREATE TABLE `tbtransaksi` (
   `idbuku` varchar(5) NOT NULL,
   `tglpinjam` date NOT NULL,
   `tglkembali` date NOT NULL,
+<<<<<<< HEAD
   `status_pengembalian` varchar(20) NOT NULL DEFAULT 'Dipinjam', -- DITAMBAHKAN
   `denda` int(11) NOT NULL DEFAULT 0                         -- DITAMBAHKAN
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -88,6 +110,24 @@ INSERT INTO `tbtransaksi` (`idtransaksi`, `idanggota`, `idbuku`, `tglpinjam`, `t
 ('TR006', 'AG003', 'BK005', '2016-11-05', '2016-11-05', 'Sudah Kembali', 0),
 ('TR007', 'AG008', 'BK013', '2016-11-05', '2021-02-23', 'Sudah Kembali', 0),
 ('TR031', 'AG010', 'BK003', '2017-01-22', '2021-02-23', 'Sudah Kembali', 0);
+=======
+  `status_pengembalian` varchar(20) NOT NULL DEFAULT 'Dipinjam' -- KOLOM PENTING DITAMBAHKAN
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `tbtransaksi` (Data disesuaikan dengan status baru)
+--
+
+INSERT INTO `tbtransaksi` (`idtransaksi`, `idanggota`, `idbuku`, `tglpinjam`, `tglkembali`, `status_pengembalian`) VALUES
+('TR001', 'AG002', 'BK002', '2016-11-03', '0000-00-00', 'Dipinjam'),
+('TR002', 'AG003', 'BK003', '2016-11-04', '2016-11-04', 'Sudah Kembali'),
+('TR003', 'AG001', 'BK001', '2016-11-04', '2021-02-23', 'Sudah Kembali'),
+('TR004', 'AG003', 'BK003', '2016-11-04', '2016-11-04', 'Sudah Kembali'),
+('TR005', 'AG006', 'BK004', '2016-11-04', '2021-02-23', 'Sudah Kembali'),
+('TR006', 'AG003', 'BK005', '2016-11-05', '2016-11-05', 'Sudah Kembali'),
+('TR007', 'AG008', 'BK013', '2016-11-05', '2021-02-23', 'Sudah Kembali'),
+('TR031', 'AG010', 'BK003', '2017-01-22', '2021-02-23', 'Sudah Kembali');
+>>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
 
 --
 -- Table structure for table `tbuser`
@@ -111,7 +151,11 @@ CREATE TABLE `tbpengembalian` (
   `idpengembalian` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `idanggota` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `idbuku` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+<<<<<<< HEAD
   `idtransaksi` varchar(5) DEFAULT NULL, -- DITAMBAHKAN
+=======
+  `idtransaksi` varchar(5) DEFAULT NULL, -- KOLOM PENTING DITAMBAHKAN UNTUK JOIN
+>>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
   `tglkembali` date NOT NULL,
   `denda` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
