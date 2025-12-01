@@ -9,6 +9,7 @@ if (isset($_SESSION['sesi'])) {
 <html>
 <head>
     <title>KERAJAAN YOHANES</title>
+    <!-- Pastikan file style.css ada dan sesuai -->
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -17,6 +18,7 @@ if (isset($_SESSION['sesi'])) {
         <!-- HEADER -->
         <div id="header">
             <div id="logo-perpustakaan-container">
+                <!-- Pastikan path gambar logo benar -->
                 <img id="logo-perpustakaan" src="images/logo-perpustakaan3.png" style="border:0;">
             </div>
             <div id="nama-alamat-perpustakaan-container">
@@ -47,7 +49,9 @@ if (isset($_SESSION['sesi'])) {
 
             <p class="label-navigasi">Data Transaksi</p>
             <ul>
-                <li><a href="index.php?p=transaksi-peminjaman">Transaksi Peminjaman</a></li>
+                <!-- Link untuk INPUT Peminjaman (sesuai kebutuhan Anda) -->
+                <li><a href="index.php?p=transaksi-peminjaman-input">Transaksi Peminjaman</a></li>
+                <!-- Link untuk DAFTAR Pengembalian -->
                 <li><a href="index.php?p=transaksi-pengembalian">Transaksi Pengembalian</a></li>
             </ul>
 
@@ -56,13 +60,8 @@ if (isset($_SESSION['sesi'])) {
                 <li><a href="index.php?p=laporan-transaksi">Laporan Transaksi</a></li>
                 <li><a href="index.php?p=denda">Manajemen Denda</a></li>
             </ul>
-
-            <!-- LABEL SAJA, TIDAK BISA DIKLIK -->
-<<<<<<< HEAD
-            <p class="label-navigasi">YOHANES</p>
-=======
-            <p class="label-navigasi">Keluar</p>
->>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
+            
+            <p class="label-navigasi">ADMIN</p>
 
             <a href="logout.php">Logout</a>
         </div>
@@ -78,11 +77,35 @@ if (isset($_SESSION['sesi'])) {
                 unset($pages[0], $pages[1]);
                 $p = $_GET['p'];
 
-                if (in_array($p.'.php', $pages)) {
-                    include($pages_dir.'/'.$p.'.php');
+                // Kita tambahkan penanganan untuk alur input transaksi
+                if ($p == 'transaksi-peminjaman') {
+                    // Jika diklik dari menu, arahkan ke input peminjaman
+                    $file_to_include = 'transaksi-peminjaman-input.php';
+                } elseif ($p == 'transaksi-pengembalian') {
+                    // Jika diklik dari menu, arahkan ke daftar pengembalian (report)
+                    $file_to_include = 'transaksi-pengembalian.php';
+                } elseif ($p == 'transaksi-peminjaman-input') {
+                    // Jika dari halaman lain ingin langsung ke input
+                    $file_to_include = 'transaksi-peminjaman-input.php';
+                } elseif ($p == 'transaksi-pengembalian-input') {
+                    // Jika dari halaman lain ingin langsung ke input pengembalian
+                    $file_to_include = 'transaksi-pengembalian-input.php';
+                } elseif (in_array($p.'.php', $pages)) {
+                    // Untuk semua halaman lainnya
+                    $file_to_include = $p.'.php';
                 } else {
+                    $file_to_include = null;
                     echo 'Halaman Tidak Ditemukan';
                 }
+                
+                // Pengecekan akhir dan eksekusi include
+                if ($file_to_include && file_exists($pages_dir.'/'.$file_to_include)) {
+                    include($pages_dir.'/'.$file_to_include);
+                } elseif($file_to_include) {
+                    // Jika file_to_include sudah ditentukan tapi file tidak ada (misal: denda.php belum dibuat)
+                    echo "File {$file_to_include} Belum Dibuat!";
+                }
+
             } else {
                 include($pages_dir.'/beranda.php');
             }

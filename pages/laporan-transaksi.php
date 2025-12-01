@@ -11,55 +11,38 @@ function debug_query($db, $query, $query_name = "Query") {
     return true;
 }
 
-// Fungsi bantu untuk menghindari Undefined index/key warnings
-function get_data($array, $key, $default = '-') {
-<<<<<<< HEAD
-=======
-    // Menggunakan Null Coalescing Operator (PHP 7.0+) atau isset()
->>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
-    return isset($array[$key]) ? $array[$key] : $default;
-}
-
-// Ambil aturan denda HANYA SEKALI
-<<<<<<< HEAD
+// Ambil aturan denda
 $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting = 1");
 if (!$set || mysqli_num_rows($set) == 0) {
-    $d = ['denda_per_hari' => 5000, 'maks_denda' => 50000];
+    $d = ['denda_per_hari' => 5000, 'maks_denda' => 50000, 'maks_hari_pinjam' => 7];
 } else {
     $d = mysqli_fetch_array($set);
 }
 
-// HITUNG DENDA OTOMATIS untuk transaksi yang statusnya 'Dipinjam'
+// CRITICAL FIX: HITUNG DENDA OTOMATIS (Hanya untuk transaksi yang BELUM KEMBALI dan sudah melewati batas waktu RENCANA)
+// Ini harus dijalankan setiap kali laporan dibuka untuk menampilkan denda aktif
 $hitung_denda_query = "
     UPDATE tbtransaksi 
     SET denda = 
         CASE 
-            WHEN DATEDIFF(CURDATE(), tglkembali) > 0 AND status_pengembalian = 'Dipinjam' THEN
-                LEAST(DATEDIFF(CURDATE(), tglkembali) * {$d['denda_per_hari']}, {$d['maks_denda']})
+            WHEN CURDATE() > tglkembali AND status_pengembalian = 'Dipinjam' THEN
+                LEAST(
+                    DATEDIFF(CURDATE(), tglkembali) * {$d['denda_per_hari']}, 
+                    {$d['maks_denda']}
+                )
             ELSE 0
         END
     WHERE status_pengembalian = 'Dipinjam'
 ";
-
-if (!mysqli_query($db, $hitung_denda_query)) {
-    // Error handling jika update gagal
-}
-=======
-$set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting=1");
-$d = mysqli_fetch_array($set);
-$maks_pinjam = $d['maks_hari_pinjam'] ?? 7; 
-$denda_per_hari = $d['denda_per_hari'] ?? 5000;
->>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
+mysqli_query($db, $hitung_denda_query);
 ?>
 
-<div id="label-page"><h3>Laporan Anggota yang Melakukan Pengembalian</h3></div>
+<div id="label-page"><h3>Laporan Seluruh Transaksi Peminjaman dan Pengembalian</h3></div>
 
 <div id="content">
 
-<<<<<<< HEAD
 <!-- Form Filter -->
 <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; background-color: #f9f9f9;">
-    <!-- ... (Form Filter HTML tetap sama) ... -->
     <h3>Filter Laporan</h3>
     <form method="get">
         <input type="hidden" name="p" value="laporan-transaksi">
@@ -69,19 +52,19 @@ $denda_per_hari = $d['denda_per_hari'] ?? 5000;
                 <td class="isian-formulir">
                     <select name="status" class="isian-formulir isian-formulir-border">
                         <option value="">Semua Status</option>
-                        <option value="Dipinjam" <?php echo (isset($_GET['status']) && $_GET['status'] == 'Dipinjam') ? 'selected' : ''; ?>>Belum Kembali</option>
+                        <option value="Dipinjam" <?php echo (isset($_GET['status']) && $_GET['status'] == 'Dipinjam') ? 'selected' : ''; ?>>Belum Kembali (Dipinjam)</option>
                         <option value="Sudah Kembali" <?php echo (isset($_GET['status']) && $_GET['status'] == 'Sudah Kembali') ? 'selected' : ''; ?>>Sudah Kembali</option>
                     </select>
                 </td>
             </tr>
             <tr>
-                <td class="label-formulir">Tanggal Mulai</td>
+                <td class="label-formulir">Tanggal Mulai (Pinjam)</td>
                 <td class="isian-formulir">
                     <input type="date" name="tgl_mulai" value="<?php echo isset($_GET['tgl_mulai']) ? $_GET['tgl_mulai'] : ''; ?>" class="isian-formulir isian-formulir-border">
                 </td>
             </tr>
             <tr>
-                <td class="label-formulir">Tanggal Sampai</td>
+                <td class="label-formulir">Tanggal Sampai (Pinjam)</td>
                 <td class="isian-formulir">
                     <input type="date" name="tgl_sampai" value="<?php echo isset($_GET['tgl_sampai']) ? $_GET['tgl_sampai'] : ''; ?>" class="isian-formulir isian-formulir-border">
                 </td>
@@ -107,107 +90,45 @@ $denda_per_hari = $d['denda_per_hari'] ?? 5000;
         </table>
     </form>
 </div>
-=======
+
+<!-- Logika Query Filter -->
 <?php
-// Query 1: Statistik Pengembalian Anggota (Menggunakan idanggota sebagai kunci)
-// Kunci Statistik menggunakan idanggota saja karena ini adalah agregasi
-$sql = "SELECT 
-        a.idanggota,
-        a.nama,
-        a.jeniskelamin,
-        a.alamat,
-        COUNT(p.idpengembalian) as total_pengembalian,
-        SUM(p.denda) as total_denda,
-        MAX(p.tglkembali) as terakhir_kembali
-        FROM tbanggota a
-        LEFT JOIN tbpengembalian p ON a.idanggota = p.idanggota
-        GROUP BY a.idanggota
-        HAVING total_pengembalian > 0
-        ORDER BY total_pengembalian DESC";
->>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
+$where = "1=1";
+$filter_params = $_GET; 
 
-$query = mysqli_query($db, $sql);
-if (!debug_query($db, $query, "Statistik Pengembalian")) { $query = false; }
-
-
-if($query && mysqli_num_rows($query) > 0) {
-?>
-<table id="tabel-tampil">
-    <tr>
-        <th>No</th>
-        <th>ID Anggota</th>
-        <th>Nama</th>
-        <th>Jenis Kelamin</th>
-        <th>Alamat</th>
-        <th>Total Pengembalian</th>
-        <th>Total Denda</th>
-        <th>Terakhir Kembali</th>
-    </tr>
-    
-    <?php
-    $nomor = 1;
-    $total_keseluruhan = 0;
-    $total_denda_keseluruhan = 0;
-    
-    while ($data = mysqli_fetch_array($query)) {
-        $total_keseluruhan += $data['total_pengembalian'];
-        $total_denda_keseluruhan += $data['total_denda'];
-    ?>
-    <tr>
-        <td><?= $nomor++; ?></td>
-        <td><?= htmlspecialchars($data['idanggota']); ?></td>
-        <td><?= htmlspecialchars($data['nama']); ?></td>
-        <td><?= htmlspecialchars($data['jeniskelamin']); ?></td>
-        <td><?= htmlspecialchars($data['alamat']); ?></td>
-        <td style="text-align: center; font-weight: bold;">
-            <?= $data['total_pengembalian']; ?>
-        </td>
-        <td style="color: <?= $data['total_denda'] > 0 ? 'red' : 'green'; ?>; font-weight: bold;">
-            Rp <?= number_format($data['total_denda'], 0, ',', '.'); ?>
-        </td>
-        <td><?= $data['terakhir_kembali'] ? htmlspecialchars($data['terakhir_kembali']) : '-'; ?></td>
-    </tr>
-    <?php } ?>
-    
-    <tr style="background-color: #f0f0f0; font-weight: bold;">
-        <td colspan="5" style="text-align: right;">TOTAL:</td>
-        <td style="text-align: center;"><?= $total_keseluruhan; ?></td>
-        <td style="color: red;">Rp <?= number_format($total_denda_keseluruhan, 0, ',', '.'); ?></td>
-        <td></td>
-    </tr>
-</table>
-
-<?php
-} else {
-    echo "<p style='text-align:center; padding:20px;'>Belum ada anggota yang melakukan pengembalian</p>";
+if(isset($filter_params['status']) && $filter_params['status'] != '') {
+    $where .= " AND t.status_pengembalian = '".mysqli_real_escape_string($db, $filter_params['status'])."'";
 }
-?>
+if(isset($filter_params['tgl_mulai']) && $filter_params['tgl_mulai'] != '') {
+    $where .= " AND t.tglpinjam >= '".mysqli_real_escape_string($db, $filter_params['tgl_mulai'])."'";
+}
+if(isset($filter_params['tgl_sampai']) && $filter_params['tgl_sampai'] != '') {
+    $where .= " AND t.tglpinjam <= '".mysqli_real_escape_string($db, $filter_params['tgl_sampai'])."'";
+}
+if(isset($filter_params['ada_denda']) && $filter_params['ada_denda'] != '') {
+    if($filter_params['ada_denda'] == 'ya') {
+        $where .= " AND t.denda > 0";
+    } else {
+        $where .= " AND t.denda = 0";
+    }
+}
 
-<h3 style="margin-top: 30px;">Laporan Seluruh Transaksi Peminjaman dan Pengembalian</h3>
+// Query Utama: SELECT dari tbtransaksi
+$qry = mysqli_query($db, "
+    SELECT 
+        t.*, 
+        a.nama as nama_anggota, 
+        b.judulbuku,
+        p.tglkembali as tgl_dikembalikan_aktual 
+    FROM tbtransaksi t 
+    JOIN tbanggota a ON t.idanggota = a.idanggota 
+    JOIN tbbuku b ON t.idbuku = b.idbuku 
+    LEFT JOIN tbpengembalian p ON t.idtransaksi = p.idtransaksi
+    WHERE $where
+    ORDER BY t.tglpinjam DESC
+");
 
-<?php
-// Query 2: Laporan Seluruh Transaksi (SAFE VERSION + MENGAMBIL STATUS)
-$sql_transaksi = "SELECT 
-               t.idtransaksi,
-               t.tglpinjam,
-               t.tglkembali as batas_waktu, 
-               t.status_pengembalian, -- DIKEMBALIKAN!
-               a.nama as nama_anggota,
-               b.judulbuku,
-               p.tglkembali as tgl_dikembalikan, 
-               p.denda
-               FROM tbtransaksi t
-               JOIN tbanggota a ON t.idanggota = a.idanggota
-               JOIN tbbuku b ON t.idbuku = b.idbuku
-               LEFT JOIN tbpengembalian p ON t.idtransaksi = p.idtransaksi
-               ORDER BY t.tglpinjam DESC";
-
-$query_transaksi = mysqli_query($db, $sql_transaksi);
-
-if (!debug_query($db, $query_transaksi, "Laporan Transaksi Umum")) { $query_transaksi = false; }
-
-
-if($query_transaksi && mysqli_num_rows($query_transaksi) > 0) {
+if (!debug_query($db, $qry, "Laporan Transaksi Umum")) { $qry = false; }
 ?>
 
 <table id="tabel-tampil">
@@ -218,142 +139,79 @@ if($query_transaksi && mysqli_num_rows($query_transaksi) > 0) {
         <th>Buku</th>
         <th>Tgl Pinjam</th>
         <th>Batas Waktu</th>
-        <th>Tgl Kembali</th>
+        <th>Tgl Kembali (Nyata)</th>
         <th>Status</th>
+        <th>Terlambat (Hari)</th>
         <th>Denda</th>
     </tr>
-<<<<<<< HEAD
+
     <?php
-    // Build query dengan filter
-    $where = "1=1";
-    
-    if(isset($_GET['status']) && $_GET['status'] != '') {
-        $where .= " AND t.status_pengembalian = '".mysqli_real_escape_string($db, $_GET['status'])."'";
-    }
-    if(isset($_GET['tgl_mulai']) && $_GET['tgl_mulai'] != '') {
-        $where .= " AND t.tglpinjam >= '".mysqli_real_escape_string($db, $_GET['tgl_mulai'])."'";
-    }
-    if(isset($_GET['tgl_sampai']) && $_GET['tgl_sampai'] != '') {
-        $where .= " AND t.tglpinjam <= '".mysqli_real_escape_string($db, $_GET['tgl_sampai'])."'";
-    }
-    if(isset($_GET['ada_denda']) && $_GET['ada_denda'] != '') {
-        if($_GET['ada_denda'] == 'ya') {
-            $where .= " AND t.denda > 0";
-        } else {
-            $where .= " AND t.denda = 0";
-        }
-    }
-    
-    // Query Utama: SELECT dari tbtransaksi
-    $qry = mysqli_query($db, "
-        SELECT 
-            t.*, 
-            a.nama as nama_anggota, 
-            b.judulbuku,
-            p.tglkembali as tgl_dikembalikan_aktual -- Tgl kembali dari tabel pengembalian
-        FROM tbtransaksi t 
-        JOIN tbanggota a ON t.idanggota = a.idanggota 
-        JOIN tbbuku b ON t.idbuku = b.idbuku 
-        LEFT JOIN tbpengembalian p ON t.idtransaksi = p.idtransaksi
-        WHERE $where
-        ORDER BY t.tglpinjam DESC
-    ");
-    
-    $total_denda = 0;
-    while($data = mysqli_fetch_array($qry)) {
-        
-        $batas_waktu = $data['tglkembali']; // Batas Waktu Pinjam
-        $denda = $data['denda']; 
-        $tgl_kembali_aktual = $data['tgl_dikembalikan_aktual']; 
-        
-        $keterlambatan = '-';
-        $tgl_display = ($tgl_kembali_aktual != null) ? $tgl_kembali_aktual : '-'; 
-        
-        // Hitung Keterlambatan
-        if($data['status_pengembalian'] == 'Dipinjam') {
-             // Hitung telat berdasarkan CURDATE (hari ini)
-             if ($batas_waktu < date('Y-m-d')) {
-                $telat_hari = date_diff(date_create($batas_waktu), date_create(date('Y-m-d')))->format('%a');
-                $keterlambatan = $telat_hari . ' hari';
-             }
-        } elseif($data['status_pengembalian'] == 'Sudah Kembali') {
-            // Hitung telat saat pengembalian dilakukan (Batas Waktu vs Tgl Kembali Aktual)
-            if ($batas_waktu < $tgl_kembali_aktual) {
-                $telat_hari = date_diff(date_create($batas_waktu), date_create($tgl_kembali_aktual))->format('%a');
-                $keterlambatan = $telat_hari . ' hari';
+    $nomor = 1;
+    $total_denda_laporan = 0;
+
+    if($qry && mysqli_num_rows($qry) > 0) {
+        while($data = mysqli_fetch_array($qry)) {
+            
+            $batas_waktu = $data['tglkembali']; // Tgl Rencana Kembali (dari tbtransaksi)
+            $denda = $data['denda']; 
+            $tgl_kembali_aktual = $data['tgl_dikembalikan_aktual']; 
+            $tgl_pinjam = $data['tglpinjam'];
+            
+            $telat_display = '-';
+            $tgl_display = ($tgl_kembali_aktual != null && $data['status_pengembalian'] == 'Sudah Kembali') ? $tgl_kembali_aktual : '-'; 
+            
+            // Logika Perhitungan Keterlambatan untuk Laporan
+            if ($data['status_pengembalian'] == 'Dipinjam') {
+                if (strtotime($batas_waktu) < strtotime(date('Y-m-d'))) {
+                    $date_diff_obj = date_diff(date_create($batas_waktu), date_create(date('Y-m-d')));
+                    $telat_display = $date_diff_obj->days . " (Aktif)";
+                }
+            } elseif ($data['status_pengembalian'] == 'Sudah Kembali' && $tgl_kembali_aktual) {
+                if (strtotime($batas_waktu) < strtotime($tgl_kembali_aktual)) {
+                    $date_diff_obj = date_diff(date_create($batas_waktu), date_create($tgl_kembali_aktual));
+                    $telat_display = $date_diff_obj->days;
+                }
             }
-            $tgl_display = $tgl_kembali_aktual; // Jika sudah kembali, tampilkan tanggal aktual
+            
+            $warna_status = ($data['status_pengembalian'] == 'Dipinjam') ? 'red' : 'green';
+            $warna_denda = ($denda > 0) ? 'red' : 'green';
+            
+            $total_denda_laporan += $denda;
+        ?>
+        <tr>
+            <td><?php echo $nomor++; ?></td>
+            <td><?php echo htmlspecialchars($data['idtransaksi']); ?></td>
+            <td><?php echo htmlspecialchars($data['nama_anggota']); ?></td>
+            <td><?php echo htmlspecialchars($data['judulbuku']); ?></td>
+            <td><?php echo htmlspecialchars($tgl_pinjam); ?></td>
+            <td><?php echo htmlspecialchars($batas_waktu); ?></td>
+            <td><?php echo $tgl_display; ?></td>
+            <td style="color: <?php echo $warna_status; ?>; font-weight: bold;"><?php echo htmlspecialchars($data['status_pengembalian']); ?></td>
+            <td><?php echo $telat_display; ?></td>
+            <td style="color: <?php echo $warna_denda; ?>; font-weight: bold;">Rp <?php echo number_format($denda, 0, ',', '.'); ?></td>
+        </tr>
+        <?php
         }
-        
-        $warna_status = ($data['status_pengembalian'] == 'Dipinjam') ? 'style="color: red; font-weight: bold;"' : 'style="color: green; font-weight: bold;"';
-        $warna_denda = ($denda > 0) ? 'style="color: red; font-weight: bold;"' : '';
-        
-        $total_denda += $denda;
-    ?>
-    <tr>
-        <td><?php echo $data['idtransaksi']; ?></td>
-        <td><?php echo $data['nama_anggota']; ?></td>
-        <td><?php echo $data['judulbuku']; ?></td>
-        <td><?php echo $data['tglpinjam']; ?></td>
-        <td><?php echo $batas_waktu; ?></td>
-        <td><?php echo $tgl_display; ?></td>
-        <td <?php echo $warna_status; ?>><?php echo $data['status_pengembalian']; ?></td>
-        <td><?php echo $keterlambatan; ?></td>
-        <td <?php echo $warna_denda; ?>>Rp <?php echo number_format($denda, 0, ',', '.'); ?></td>
-=======
-<?php
-    $nomor_transaksi = 1;
-    while ($data_transaksi = mysqli_fetch_array($query_transaksi)) {
-        
-        // Ambil status dari tbtransaksi
-        $status_display = get_data($data_transaksi, 'status_pengembalian', 'Dipinjam'); 
-        
-        // Cek denda dari tbpengembalian (jika NULL, anggap 0)
-        $denda_val = get_data($data_transaksi, 'denda', 0);
-        $batas_waktu_val = get_data($data_transaksi, 'batas_waktu', '-');
-        
-        // Jika sudah dikembalikan, pakai tgl_dikembalikan, jika belum, pakai '-'
-        $tgl_kembali_val = get_data($data_transaksi, 'tgl_dikembalikan', '-'); 
-?>
-    <tr>
-        <td><?= $nomor_transaksi++; ?></td>
-        <td><?= htmlspecialchars($data_transaksi['idtransaksi']); ?></td>
-        <td><?= htmlspecialchars($data_transaksi['nama_anggota']); ?></td>
-        <td><?= htmlspecialchars($data_transaksi['judulbuku']); ?></td>
-        <td><?= htmlspecialchars($data_transaksi['tglpinjam']); ?></td>
-        <td><?= htmlspecialchars($batas_waktu_val); ?></td>
-        <td><?= htmlspecialchars($tgl_kembali_val); ?></td>
-        <td><?= htmlspecialchars($status_display); ?></td>
-        <td style="color: <?= $denda_val > 0 ? 'red' : 'green'; ?>;">
-            Rp <?= number_format($denda_val, 0, ',', '.'); ?>
-        </td>
->>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
-    </tr>
-<?php
+    } else {
+        echo "<tr><td colspan='10' style='text-align:center; padding:20px;'>Tidak ada data transaksi yang sesuai dengan filter.</td></tr>";
     }
-?>
+    ?>
 </table>
-<<<<<<< HEAD
 
 <!-- Statistik -->
 <div style="margin-top: 20px; padding: 15px; border: 1px solid #ccc; background-color: #f9f9f9;">
-    <h3>Statistik Transaksi</h3>
+    <h3>Statistik Laporan</h3>
     <?php
     $total_transaksi = mysqli_fetch_array(mysqli_query($db, "SELECT COUNT(*) as total FROM tbtransaksi t WHERE $where"))['total'];
     $belum_kembali = mysqli_fetch_array(mysqli_query($db, "SELECT COUNT(*) as total FROM tbtransaksi t WHERE status_pengembalian = 'Dipinjam' AND $where"))['total'];
+    
     $denda_aktif = mysqli_fetch_array(mysqli_query($db, "SELECT COALESCE(SUM(denda), 0) as total FROM tbtransaksi t WHERE status_pengembalian = 'Dipinjam' AND $where"))['total'];
     ?>
-    <p>Total Transaksi: <strong><?php echo $total_transaksi; ?></strong></p>
-    <p>Belum Dikembalikan: <strong style="color: red;"><?php echo $belum_kembali; ?></strong></p>
-    <p>Total Denda Aktif (Belum Kembali): <strong style="color: red;">Rp <?php echo number_format($denda_aktif, 0, ',', '.'); ?></strong></p>
-    <p>Total Denda (Semua Filter): <strong>Rp <?php echo number_format($total_denda, 0, ',', '.'); ?></strong></p>
+    <p>Total Transaksi dalam Filter: <strong><?php echo $total_transaksi; ?></strong></p>
+    <p>Total Belum Dikembalikan dalam Filter: <strong style="color: red;"><?php echo $belum_kembali; ?></strong></p>
+    <p>Total Denda (Keseluruhan Transaksi Tampil): <strong style="color: red;">Rp <?php echo number_format($total_denda_laporan, 0, ',', '.'); ?></strong></p>
+    <p>Total Denda Aktif (Belum Kembali, Saat Ini): <strong style="color: red;">Rp <?php echo number_format($denda_aktif, 0, ',', '.'); ?></strong></p>
 </div>
-=======
-<?php
-} else {
-    echo "<p style='text-align:center; padding:20px;'>Tidak ada data transaksi</p>";
-}
-?>
->>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
+
 
 </div>
