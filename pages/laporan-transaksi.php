@@ -1,15 +1,8 @@
 <?php
 include "koneksi.php";
 
-// Fungsi untuk debugging MySQL
-function debug_query($db, $query, $query_name = "Query") {
-    if (!$query) {
-        echo "<p style='color: red; font-weight: bold;'>!!! SQL ERROR ($query_name) !!!</p>";
-        echo "<p>MySQL Error: " . mysqli_error($db) . "</p>";
-        return false;
-    }
-    return true;
-}
+// Fungsi untuk debugging MySQL (Dibuang dari tampilan, karena seharusnya di log atau die)
+/* function debug_query... */
 
 // Ambil aturan denda
 $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting = 1");
@@ -19,8 +12,8 @@ if (!$set || mysqli_num_rows($set) == 0) {
     $d = mysqli_fetch_array($set);
 }
 
-// CRITICAL FIX: HITUNG DENDA OTOMATIS (Hanya untuk transaksi yang BELUM KEMBALI dan sudah melewati batas waktu RENCANA)
-// Ini harus dijalankan setiap kali laporan dibuka untuk menampilkan denda aktif
+// CRITICAL FIX: HITUNG DENDA OTOMATIS (Wajib jalan)
+// Hitung denda hanya untuk yang Dipinjam dan sudah lewat tglkembali (rencana)
 $hitung_denda_query = "
     UPDATE tbtransaksi 
     SET denda = 
@@ -41,57 +34,52 @@ mysqli_query($db, $hitung_denda_query);
 
 <div id="content">
 
-<!-- Form Filter -->
-<div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; background-color: #f9f9f9;">
-    <h3>Filter Laporan</h3>
+<!-- Form Filter - DIBUNGKUS DENGAN CLASS FILTER-BOX YANG ELEGAN -->
+<div class="filter-box">
+    <!-- Hapus H3 Filter Laporan karena sudah ada di #label-page -->
     <form method="get">
         <input type="hidden" name="p" value="laporan-transaksi">
-        <table id="tabel-input">
-            <tr>
-                <td class="label-formulir">Status</td>
-                <td class="isian-formulir">
-                    <select name="status" class="isian-formulir isian-formulir-border">
-                        <option value="">Semua Status</option>
-                        <option value="Dipinjam" <?php echo (isset($_GET['status']) && $_GET['status'] == 'Dipinjam') ? 'selected' : ''; ?>>Belum Kembali (Dipinjam)</option>
-                        <option value="Sudah Kembali" <?php echo (isset($_GET['status']) && $_GET['status'] == 'Sudah Kembali') ? 'selected' : ''; ?>>Sudah Kembali</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="label-formulir">Tanggal Mulai (Pinjam)</td>
-                <td class="isian-formulir">
-                    <input type="date" name="tgl_mulai" value="<?php echo isset($_GET['tgl_mulai']) ? $_GET['tgl_mulai'] : ''; ?>" class="isian-formulir isian-formulir-border">
-                </td>
-            </tr>
-            <tr>
-                <td class="label-formulir">Tanggal Sampai (Pinjam)</td>
-                <td class="isian-formulir">
-                    <input type="date" name="tgl_sampai" value="<?php echo isset($_GET['tgl_sampai']) ? $_GET['tgl_sampai'] : ''; ?>" class="isian-formulir isian-formulir-border">
-                </td>
-            </tr>
-            <tr>
-                <td class="label-formulir">Ada Denda</td>
-                <td class="isian-formulir">
-                    <select name="ada_denda" class="isian-formulir isian-formulir-border">
-                        <option value="">Semua</option>
-                        <option value="ya" <?php echo (isset($_GET['ada_denda']) && $_GET['ada_denda'] == 'ya') ? 'selected' : ''; ?>>Ada Denda</option>
-                        <option value="tidak" <?php echo (isset($_GET['ada_denda']) && $_GET['ada_denda'] == 'tidak') ? 'selected' : ''; ?>>Tidak Ada Denda</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <input type="submit" value="Filter" class="tombol">
-                    <a href="index.php?p=laporan-transaksi" class="tombol">Reset</a>
-                    <a href="cetak/cetak-laporan-transaksi.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="tombol">Cetak Laporan</a>
-                </td>
-            </tr>
-        </table>
+        
+        <!-- MENGGUNAKAN DIV FLEX UNTUK LAYOUT FILTER YANG LEBIH RAPI DARIPADA TABLE FORM -->
+        <div class="filter-row">
+            <label for="status">Status</label>
+            <select name="status" id="status">
+                <option value="">Semua Status</option>
+                <option value="Dipinjam" <?php echo (isset($_GET['status']) && $_GET['status'] == 'Dipinjam') ? 'selected' : ''; ?>>Belum Kembali (Dipinjam)</option>
+                <option value="Sudah Kembali" <?php echo (isset($_GET['status']) && $_GET['status'] == 'Sudah Kembali') ? 'selected' : ''; ?>>Sudah Kembali</option>
+            </select>
+        </div>
+        
+        <div class="filter-row">
+            <label for="tgl_mulai">Tanggal Mulai (Pinjam)</label>
+            <input type="date" name="tgl_mulai" id="tgl_mulai" value="<?php echo isset($_GET['tgl_mulai']) ? $_GET['tgl_mulai'] : ''; ?>">
+        </div>
+        
+        <div class="filter-row">
+            <label for="tgl_sampai">Tanggal Sampai (Pinjam)</label>
+            <input type="date" name="tgl_sampai" id="tgl_sampai" value="<?php echo isset($_GET['tgl_sampai']) ? $_GET['tgl_sampai'] : ''; ?>">
+        </div>
+        
+        <div class="filter-row">
+            <label for="ada_denda">Ada Denda</label>
+            <select name="ada_denda" id="ada_denda">
+                <option value="">Semua</option>
+                <option value="ya" <?php echo (isset($_GET['ada_denda']) && $_GET['ada_denda'] == 'ya') ? 'selected' : ''; ?>>Ada Denda</option>
+                <option value="tidak" <?php echo (isset($_GET['ada_denda']) && $_GET['ada_denda'] == 'tidak') ? 'selected' : ''; ?>>Tidak Ada Denda</option>
+            </select>
+        </div>
+        
+        <!-- Tombol Aksi - Menggunakan CSS Tombol Interaktif Baru -->
+        <div class="filter-actions">
+            <input type="submit" value="FILTER" class="tombol">
+            <a href="index.php?p=laporan-transaksi" class="tombol tombol-reset">RESET</a>
+            <!-- Pastikan URL cetak membawa semua parameter filter -->
+            <a href="cetak/cetak-laporan-transaksi.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="tombol tombol-cetak">CETAK LAPORAN</a>
+        </div>
     </form>
 </div>
 
-<!-- Logika Query Filter -->
+<!-- Logika Query Filter (Sama seperti sebelumnya) -->
 <?php
 $where = "1=1";
 $filter_params = $_GET; 
@@ -127,8 +115,8 @@ $qry = mysqli_query($db, "
     WHERE $where
     ORDER BY t.tglpinjam DESC
 ");
+// Tidak perlu debug_query di sini, karena ini hanya laporan tampilan
 
-if (!debug_query($db, $qry, "Laporan Transaksi Umum")) { $qry = false; }
 ?>
 
 <table id="tabel-tampil">
@@ -152,7 +140,7 @@ if (!debug_query($db, $qry, "Laporan Transaksi Umum")) { $qry = false; }
     if($qry && mysqli_num_rows($qry) > 0) {
         while($data = mysqli_fetch_array($qry)) {
             
-            $batas_waktu = $data['tglkembali']; // Tgl Rencana Kembali (dari tbtransaksi)
+            $batas_waktu = $data['tglkembali']; 
             $denda = $data['denda']; 
             $tgl_kembali_aktual = $data['tgl_dikembalikan_aktual']; 
             $tgl_pinjam = $data['tglpinjam'];
@@ -173,8 +161,9 @@ if (!debug_query($db, $qry, "Laporan Transaksi Umum")) { $qry = false; }
                 }
             }
             
-            $warna_status = ($data['status_pengembalian'] == 'Dipinjam') ? 'red' : 'green';
-            $warna_denda = ($denda > 0) ? 'red' : 'green';
+            // Menggunakan Class CSS yang sudah didefinisikan untuk warna elegan
+            $class_status = ($data['status_pengembalian'] == 'Dipinjam') ? 'status-belum-kembali' : 'status-sudah-kembali';
+            $class_denda = ($denda > 0) ? 'denda-ada' : '';
             
             $total_denda_laporan += $denda;
         ?>
@@ -186,9 +175,11 @@ if (!debug_query($db, $qry, "Laporan Transaksi Umum")) { $qry = false; }
             <td><?php echo htmlspecialchars($tgl_pinjam); ?></td>
             <td><?php echo htmlspecialchars($batas_waktu); ?></td>
             <td><?php echo $tgl_display; ?></td>
-            <td style="color: <?php echo $warna_status; ?>; font-weight: bold;"><?php echo htmlspecialchars($data['status_pengembalian']); ?></td>
+            <!-- MENGGUNAKAN CLASS CSS -->
+            <td class="<?php echo $class_status; ?>"><?php echo htmlspecialchars($data['status_pengembalian']); ?></td>
             <td><?php echo $telat_display; ?></td>
-            <td style="color: <?php echo $warna_denda; ?>; font-weight: bold;">Rp <?php echo number_format($denda, 0, ',', '.'); ?></td>
+            <!-- MENGGUNAKAN CLASS CSS -->
+            <td class="<?php echo $class_denda; ?>">Rp <?php echo number_format($denda, 0, ',', '.'); ?></td>
         </tr>
         <?php
         }
@@ -198,19 +189,20 @@ if (!debug_query($db, $qry, "Laporan Transaksi Umum")) { $qry = false; }
     ?>
 </table>
 
-<!-- Statistik -->
-<div style="margin-top: 20px; padding: 15px; border: 1px solid #ccc; background-color: #f9f9f9;">
+<!-- Statistik - Menggunakan Class CSS Statistik yang Elegan -->
+<div class="statistik-laporan">
     <h3>Statistik Laporan</h3>
     <?php
     $total_transaksi = mysqli_fetch_array(mysqli_query($db, "SELECT COUNT(*) as total FROM tbtransaksi t WHERE $where"))['total'];
     $belum_kembali = mysqli_fetch_array(mysqli_query($db, "SELECT COUNT(*) as total FROM tbtransaksi t WHERE status_pengembalian = 'Dipinjam' AND $where"))['total'];
     
+    // Total denda AKTIF (dari transaksi yang masih dipinjam)
     $denda_aktif = mysqli_fetch_array(mysqli_query($db, "SELECT COALESCE(SUM(denda), 0) as total FROM tbtransaksi t WHERE status_pengembalian = 'Dipinjam' AND $where"))['total'];
     ?>
     <p>Total Transaksi dalam Filter: <strong><?php echo $total_transaksi; ?></strong></p>
-    <p>Total Belum Dikembalikan dalam Filter: <strong style="color: red;"><?php echo $belum_kembali; ?></strong></p>
-    <p>Total Denda (Keseluruhan Transaksi Tampil): <strong style="color: red;">Rp <?php echo number_format($total_denda_laporan, 0, ',', '.'); ?></strong></p>
-    <p>Total Denda Aktif (Belum Kembali, Saat Ini): <strong style="color: red;">Rp <?php echo number_format($denda_aktif, 0, ',', '.'); ?></strong></p>
+    <p>Total Belum Dikembalikan dalam Filter: <strong class="status-belum-kembali"><?php echo $belum_kembali; ?></strong></p>
+    <p>Total Denda Keseluruhan (Dibayar/Aktif) dalam Filter: <strong class="denda-ada">Rp <?php echo number_format($total_denda_laporan, 0, ',', '.'); ?></strong></p>
+    <p>Total Denda AKTIF (Di Hitung Saat Ini): <strong class="denda-ada">Rp <?php echo number_format($denda_aktif, 0, ',', '.'); ?></strong></p>
 </div>
 
 
