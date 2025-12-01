@@ -3,10 +3,15 @@ include "koneksi.php";
 
 // Fungsi untuk mendapatkan ID Pengembalian baru secara otomatis
 function generate_id_pengembalian($db) {
+    // Mengambil nilai numerik maksimum dari idpengembalian setelah karakter pertama ('P')
     $q = mysqli_query($db, "SELECT MAX(SUBSTRING(idpengembalian, 2)) AS last_id FROM tbpengembalian");
     $data = mysqli_fetch_assoc($q);
+    
+    // Menggunakan operator null coalescing (?? 0) untuk menghindari error jika tabel kosong
     $last_id = (int)($data['last_id'] ?? 0);
     $next_id = $last_id + 1;
+    
+    // Format menjadi P001, P002, dst.
     return 'P' . sprintf('%03s', $next_id); 
 }
 
@@ -119,7 +124,7 @@ if (isset($_POST['simpan'])) {
     $idanggota  = mysqli_real_escape_string($db, $_POST['idanggota']);
     $idbuku     = mysqli_real_escape_string($db, $_POST['idbuku']);
     $tglkembali = mysqli_real_escape_string($db, $_POST['tglkembali']);
-    $tglpinjam  = mysqli_real_escape_string($db, $_POST['tglpinjam']); // diambil dari hidden input
+    $tglpinjam  = mysqli_real_escape_string($db, $_POST['tglpinjam']);
 
     // Validasi Tanggal Kembali
     if (strtotime($tglkembali) < strtotime($tglpinjam)) {
@@ -156,7 +161,6 @@ if (isset($_POST['simpan'])) {
     if ($insert_result) {
         
         // 5. UPDATE: Set status di tbtransaksi menjadi 'Sudah Kembali' dan update denda serta TGL KEMBALI NYATA
-        // Catatan: Tgl kembali di tbtransaksi akan di-overwrite dengan tgl kembali nyata.
         mysqli_query($db, "UPDATE tbtransaksi SET status_pengembalian='Sudah Kembali', denda='$total_denda', tglkembali='$tglkembali' WHERE idtransaksi='$idtrx'");
         
         // 6. UPDATE: Set status buku
