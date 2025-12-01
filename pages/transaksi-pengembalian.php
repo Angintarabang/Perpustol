@@ -17,54 +17,47 @@ include "koneksi.php";
     <th>Anggota</th>
     <th>Buku</th>
     <th>Tanggal Pinjam</th>
-    <th>Tanggal Kembali</th>
+    <th>Tanggal Kembali (Nyata)</th>
     <th>Terlambat</th>
     <th>Denda</th>
     <th>Opsi</th>
 </tr>
 
 <?php
-// Query untuk mengambil data pengembalian dengan info anggota dan buku
-$sql = "SELECT p.*, a.nama as nama_anggota, a.jeniskelamin, b.judulbuku, t.tglpinjam
+// Ambil aturan denda global untuk perhitungan telat di laporan
+$set_denda = mysqli_query($db, "SELECT maks_hari_pinjam FROM tbdenda WHERE id_setting=1");
+$denda_data = mysqli_fetch_array($set_denda);
+$maks_pinjam = $denda_data['maks_hari_pinjam'] ?? 7;
+
+
+// UPGRADED QUERY: JOIN harus menggunakan idtransaksi untuk keakuratan data tglpinjam
+$sql = "SELECT 
+            p.*, 
+            a.nama as nama_anggota, 
+            a.jeniskelamin, 
+            b.judulbuku, 
+            t.tglpinjam AS tgl_pinjam_transaksi
         FROM tbpengembalian p
         JOIN tbanggota a ON p.idanggota = a.idanggota
         JOIN tbbuku b ON p.idbuku = b.idbuku
-        LEFT JOIN tbtransaksi t ON p.idanggota = t.idanggota AND p.idbuku = t.idbuku
+        JOIN tbtransaksi t ON p.idtransaksi = t.idtransaksi 
         ORDER BY p.idpengembalian DESC";
 
 $query = mysqli_query($db, $sql);
 
-$nomor = 1;
+if(mysqli_num_rows($query) > 0) {
+    $nomor = 1;
 
-while ($data = mysqli_fetch_array($query)) {
-
-    // ambil data peminjaman dari tbtransaksi
-    $qpinjam = mysqli_query($db, 
-        "SELECT * FROM tbtransaksi 
-         WHERE idanggota='$data[idanggota]' 
-         AND idbuku='$data[idbuku]'"
-    );
-
-    $pinjam = mysqli_fetch_array($qpinjam);
-
-    // Jika tidak ada data pinjam → tampil "-"
-    $tgl_pinjam = $pinjam['tglpinjam'] ?? "-";
-    $tgl_kembali = $data['tglkembali'];
-
-    // Hitung keterlambatan hanya jika data pinjam ada
-    if ($tgl_pinjam != "-") {
-        $selisih_hari = (strtotime($tgl_kembali) - strtotime($tgl_pinjam)) / (60*60*24);
-
-        // ambil aturan denda
-        $set = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting=1");
-        $d = mysqli_fetch_array($set);
-
-        $maks_pinjam = $d['maks_hari_pinjam'];
-
-        $telat = max(0, $selisih_hari - $maks_pinjam);
-    } else {
+    while ($data = mysqli_fetch_array($query)) {
+        $tgl_pinjam = $data['tgl_pinjam_transaksi'];
+        $tgl_kembali = $data['tglkembali'];
         $telat = 0;
-    }
+
+        // Hitung selisih hari jika data tanggal lengkap
+        if($tgl_pinjam && $tgl_kembali) {
+            $selisih_hari = floor((strtotime($tgl_kembali) - strtotime($tgl_pinjam)) / (60*60*24));
+            $telat = max(0, $selisih_hari - $maks_pinjam);
+        }
 ?>
 <tr>
     <td><?= $nomor++; ?></td>
@@ -89,7 +82,7 @@ while ($data = mysqli_fetch_array($query)) {
     <td>
         <a class="tombol" 
            href="pages/transaksi-pengembalian-hapus.php?id=<?= $data['idpengembalian']; ?>" 
-           onclick="return confirm('Hapus data pengembalian ini?')">
+           onclick="return confirm('Hapus data pengembalian ini? Tindakan ini tidak akan mengembalikan status buku/anggota.')">
            Hapus
         </a>
     </td>
@@ -102,4 +95,4 @@ while ($data = mysqli_fetch_array($query)) {
 ?>
 </table>
 
-</div>s
+</div>
