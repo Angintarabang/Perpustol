@@ -11,6 +11,10 @@ if(isset($_SESSION['user'])) {
 <html>
     <head>
         <title>Login - ADMIN OF CHAOS</title>
+        <!-- Google Fonts: Cinzel (untuk Judul) & Poppins (untuk Body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="style_login.css">
         <!-- Menggunakan Font dari Google untuk tampilan yang lebih baik -->
         <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@300&display=swap" rel="stylesheet">
