@@ -1,25 +1,25 @@
 /* 
- * STYLE.CSS - DASHBOARD OF CHAOS
+ * STYLE.CSS - DASHBOARD OF CHAOS (FIXED & POLISHED)
  * Level: GOD TIER DESIGN
- * Concept: Dark Luxury, Glowing Gold, Cinematic Depth
+ * Status: ERROR FREE & FULL WIDTH
  */
 
 :root {
     /* PALET WARNA CHAOS */
-    --bg-core: #050505;          /* Hitam Pekat */
-    --bg-surface: #121212;       /* Hitam Arang (Card/Sidebar) */
-    --bg-glass: rgba(20, 20, 20, 0.9); /* Transparan Gelap */
+    --bg-core: #050505;          
+    --bg-surface: #121212;       
+    --bg-glass: rgba(20, 20, 20, 0.9); 
     
-    --gold-primary: #ffda47;     /* Emas Utama (Sama kayak Login) */
-    --gold-dark: #b8860b;        /* Emas Gelap untuk Shadow */
+    --gold-primary: #ffda47;     
+    --gold-dark: #b8860b;        
     
-    --danger-red: #8a0000;       /* Merah Darah (Delete/Logout) */
+    --danger-red: #8a0000;       
     --danger-glow: #ff1100;
     
-    --text-main: #f0f0f0;        /* Putih Tulang */
-    --text-muted: #888888;       /* Abu-abu */
+    --text-main: #f0f0f0;        
+    --text-muted: #888888;       
     
-    --accent-glow: 0 0 15px rgba(255, 218, 71, 0.3); /* Glow Emas */
+    --accent-glow: 0 0 15px rgba(255, 218, 71, 0.3); 
 }
 
 /* --- 1. GLOBAL RESET & BASE --- */
@@ -27,42 +27,23 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animasi halus */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
-    font-family: 'Poppins', sans-serif; /* Body pakai font modern */
+    font-family: 'Poppins', sans-serif;
     font-size: 14px;
     color: var(--text-main);
     background-color: var(--bg-core);
-    /* Background Vignette biar fokus di tengah */
     background-image: radial-gradient(circle at top center, #1a1a1a 0%, #000000 80%);
     min-height: 100vh;
 }
 
-/* Scrollbar Custom (Biar gak putih ngerusak mata) */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #000; 
-}
-::-webkit-scrollbar-thumb {
-    background: #333; 
-    border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: var(--gold-dark); 
-}
-
-#container {
-    width: 100%;
-    max-width: 100%; /* Full Width biar lega */
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-}
+/* Scrollbar Custom */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
 
 /* --- 2. HEADER: COMMAND CENTER --- */
 #header {
@@ -78,7 +59,6 @@ body {
     z-index: 100;
 }
 
-/* Efek garis emas berjalan di bawah header */
 #header::after {
     content: '';
     position: absolute;
@@ -97,14 +77,10 @@ body {
     filter: drop-shadow(0 0 5px var(--gold-primary));
 }
 
-#logo-perpustakaan {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+#logo-perpustakaan { width: 100%; height: 100%; object-fit: contain; }
 
 .nama-alamat-perpustakaan h1 {
-    font-family: 'Cinzel', serif; /* Font Chaos */
+    font-family: 'Cinzel', serif;
     font-size: 1.8em;
     color: var(--gold-primary);
     text-shadow: 0 0 10px rgba(255, 218, 71, 0.4);
@@ -129,26 +105,20 @@ body {
     padding: 0 30px;
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Nama user di kanan */
+    justify-content: flex-end;
     border-bottom: 1px solid #333;
     font-size: 0.9em;
 }
 
-#nama-user {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+#nama-user { display: flex; align-items: center; gap: 10px; }
 
 /* --- 3. SIDEBAR: DARK NAVIGATION --- */
 #sidebar {
-    width: 260px;
+    /* Style dasar sidebar, layoutnya diatur di bagian FIX LAYOUT bawah */
     background: var(--bg-surface);
-    min-height: calc(100vh - 80px); /* Full height sisa */
+    min-height: calc(100vh - 80px);
     padding-top: 20px;
     border-right: 1px solid #222;
-    display: flex;
-    flex-direction: column;
 }
 
 .label-navigasi {
@@ -161,10 +131,7 @@ body {
     margin-top: 10px;
 }
 
-#sidebar ul {
-    list-style: none;
-    padding: 0 10px;
-}
+#sidebar ul { list-style: none; padding: 0 10px; }
 
 #sidebar a {
     display: block;
@@ -179,16 +146,14 @@ body {
     border: 1px solid transparent;
 }
 
-/* Hover Effect Keren buat Menu */
 #sidebar a:hover {
     background: rgba(255, 218, 71, 0.05);
     color: var(--gold-primary);
-    padding-left: 20px; /* Geser dikit */
+    padding-left: 20px;
     border-color: rgba(255, 218, 71, 0.2);
     box-shadow: inset 0 0 10px rgba(255, 218, 71, 0.05);
 }
 
-/* Menu Aktif */
 #sidebar a.active {
     background: linear-gradient(90deg, rgba(255, 218, 71, 0.1), transparent);
     color: var(--gold-primary);
@@ -196,7 +161,6 @@ body {
     font-weight: 600;
 }
 
-/* Tombol Logout Spesial */
 #sidebar a[href*="logout"] {
     margin-top: 20px;
     color: #ff5555;
@@ -208,13 +172,7 @@ body {
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
 }
 
-/* --- 4. CONTENT AREA: GLASS PANELS --- */
-#content-container {
-    flex: 1; /* Isi sisa ruang */
-    padding: 30px;
-    background: transparent; /* Biar nembus background body */
-}
-
+/* --- 4. CONTENT AREA BASICS --- */
 #label-page {
     font-family: 'Cinzel', serif;
     font-size: 2em;
@@ -226,7 +184,6 @@ body {
     text-shadow: 0 0 10px rgba(255, 218, 71, 0.2);
 }
 
-/* Container Utama Konten (Card Style) */
 #content {
     background: var(--bg-glass);
     padding: 30px;
@@ -235,6 +192,7 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     backdrop-filter: blur(5px);
     min-height: 500px;
+    /* Lebar diatur di bawah */
 }
 
 /* --- 5. BERANDA (HOME) --- */
@@ -245,10 +203,7 @@ body {
     text-align: center;
     margin-bottom: 10px;
 }
-#beranda-judul span {
-    color: var(--gold-primary); /* Highlight nama library */
-}
-
+#beranda-judul span { color: var(--gold-primary); }
 #beranda-konten {
     text-align: center;
     color: var(--text-muted);
@@ -256,14 +211,12 @@ body {
     font-size: 1.1em;
 }
 
-/* Card Profil di Beranda */
 .profile-card-wrapper {
     display: flex;
     justify-content: center;
     gap: 30px;
     margin-top: 40px;
 }
-
 .profile-card {
     background: #1a1a1a;
     border: 1px solid #333;
@@ -274,16 +227,13 @@ body {
     position: relative;
     overflow: hidden;
 }
-
 .profile-card:hover {
     transform: translateY(-10px);
     border-color: var(--gold-primary);
     box-shadow: 0 0 30px rgba(255, 218, 71, 0.1);
 }
-
 .profile-img {
-    width: 120px;
-    height: 120px;
+    width: 120px; height: 120px;
     border-radius: 50%;
     border: 3px solid var(--gold-primary);
     padding: 4px;
@@ -291,25 +241,35 @@ body {
     margin-bottom: 20px;
     background: #000;
 }
+.profile-card h3 { color: var(--gold-primary); font-size: 1.4em; margin-bottom: 5px; }
 
-.profile-card h3 {
-    color: var(--gold-primary);
-    font-size: 1.4em;
-    margin-bottom: 5px;
+
+/* =========================================
+   MASTER TABLE STYLE - CHAOS THEME (FINAL)
+   ========================================= */
+
+/* 1. Wrapper (Wadah) Tabel */
+div[style*="overflow-x: auto"], 
+.table-responsive {
+    display: block;
+    width: 100% !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* --- 6. TABLES: DATA DISPLAY --- */
-/* Bungkus tabel biar bisa di-scroll kalau sempit */
+/* 2. Tabel Utama */
 #tabel-tampil {
-    width: 100%;
-    border-collapse: separate; /* Biar bisa rounded corner */
-    border-spacing: 0;
+    display: table !important;
+    width: 100% !important;
+    min-width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
-    border-radius: 8px;
-    overflow: hidden;
+    margin-bottom: 20px;
     border: 1px solid #333;
+    background-color: transparent;
 }
 
+/* 3. Header Tabel */
 #tabel-tampil th {
     background: linear-gradient(180deg, #222, #111);
     color: var(--gold-primary);
@@ -318,22 +278,44 @@ body {
     text-transform: uppercase;
     font-size: 0.85em;
     letter-spacing: 1px;
+    white-space: nowrap;
     border-bottom: 2px solid var(--gold-dark);
+    border-right: 1px solid #333;
 }
 
+/* 4. Isi Data */
 #tabel-tampil td {
     padding: 12px 15px;
-    border-bottom: 1px solid #222;
     color: #ccc;
-    background: rgba(30, 30, 30, 0.4);
+    background: rgba(20, 20, 20, 0.6);
+    vertical-align: middle;
+    border-bottom: 1px solid #333;
+    border-right: 1px solid #333;
+}
+
+#tabel-tampil th:last-child, 
+#tabel-tampil td:last-child {
+    border-right: none;
 }
 
 #tabel-tampil tr:hover td {
-    background: rgba(255, 218, 71, 0.05); /* Highlight row */
+    background: rgba(255, 218, 71, 0.08); 
     color: #fff;
+    transition: background 0.2s ease;
 }
 
-/* --- 7. BUTTONS: INTERACTIVE & GLOW --- */
+/* 5. Center Alignment for No & ID */
+#tabel-tampil th:first-child, 
+#tabel-tampil td:first-child,
+#tabel-tampil th:nth-child(2), 
+#tabel-tampil td:nth-child(2) {
+    text-align: center;
+    width: 1%;
+    white-space: nowrap;
+}
+
+
+/* --- 7. BUTTONS --- */
 .tombol, input[type="submit"] {
     display: inline-block;
     padding: 10px 20px;
@@ -356,33 +338,20 @@ body {
     transform: translateY(-2px);
 }
 
-/* Tombol Edit (Biru/Ungu Gelap) */
 a.tombol[href*="edit"] {
     background: linear-gradient(135deg, #444, #222);
     border: 1px solid #555;
     color: #ccc;
 }
-a.tombol[href*="edit"]:hover {
-    background: #555;
-    color: #fff;
-    border-color: #fff;
-}
+a.tombol[href*="edit"]:hover { background: #555; color: #fff; border-color: #fff; }
 
-/* Tombol Hapus (Merah Chaos) */
 a.tombol[href*="hapus"] {
     background: linear-gradient(135deg, #500000, #300000);
     color: #ffcccc;
 }
-a.tombol[href*="hapus"]:hover {
-    background: #800000;
-    color: #fff;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
-}
+a.tombol[href*="hapus"]:hover { background: #800000; color: #fff; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); }
 
-/* Tombol Tambah (Spesial Besar) */
-#tombol-tambah-container {
-    margin-bottom: 20px;
-}
+#tombol-tambah-container { margin-bottom: 20px; width: 100%; display: block; }
 #tombol-tambah-container a {
     background: var(--gold-primary);
     color: #000;
@@ -390,7 +359,7 @@ a.tombol[href*="hapus"]:hover {
     padding: 12px 25px;
 }
 
-/* --- 8. FORMS & INPUTS (NO WHITE!) --- */
+/* --- 8. FORMS & INPUTS --- */
 .label-formulir {
     display: block;
     margin-bottom: 8px;
@@ -399,7 +368,6 @@ a.tombol[href*="hapus"]:hover {
     font-size: 0.9em;
 }
 
-/* Reset semua input jadi GELAP */
 .isian-formulir, 
 .isian-formulir2, 
 input[type="text"], 
@@ -409,26 +377,22 @@ select,
 textarea {
     width: 100%;
     padding: 12px;
-    background-color: #1a1a1a; /* Dark Background */
+    background-color: #1a1a1a;
     border: 1px solid #333;
     border-radius: 6px;
-    color: #fff; /* Text Putih */
+    color: #fff;
     font-family: 'Poppins', sans-serif;
     margin-bottom: 20px;
 }
 
-/* Focus State */
 .isian-formulir:focus, 
-input:focus, 
-select:focus, 
-textarea:focus {
+input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--gold-primary);
     background-color: #222;
     box-shadow: 0 0 10px rgba(255, 218, 71, 0.2);
 }
 
-/* Fix Autofill Browser (Biar gak jadi putih backgroundnya) */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
@@ -437,7 +401,7 @@ input:-webkit-autofill:active{
     -webkit-text-fill-color: white !important;
 }
 
-/* --- 9. PAGINATION & FOOTER --- */
+/* --- 9. FOOTER & ANIMATIONS --- */
 #footer {
     text-align: center;
     padding: 20px;
@@ -447,12 +411,12 @@ input:-webkit-autofill:active{
     background: #000;
 }
 
-/* --- ANIMATIONS --- */
 @keyframes scanline {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
 }
 
+/* --- 10. MEDIA QUERIES (FIXED BRACKET) --- */
 @media (max-width: 768px) {
     #sidebar {
         width: 100%;
@@ -464,9 +428,38 @@ input:-webkit-autofill:active{
     #content-container {
         width: 100%;
         float: none;
+        padding: 20px;
     }
-    #tabel-tampil {
-        display: block;
-        overflow-x: auto;
-    }
+} 
+/* <--- KURUNG TUTUP PENTING! */
+
+
+/* --- 11. FIX LAYOUT FORCE FULL WIDTH (DESKTOP & MOBILE) --- */
+
+#container {
+    display: flex;
+    flex-wrap: wrap; /* Biar responsif */
+    width: 100%;
+    max-width: 100%;
+}
+
+#sidebar {
+    width: 260px;
+    flex-shrink: 0;
+}
+
+#content-container {
+    flex-grow: 1; /* Ambil sisa ruang */
+    width: calc(100% - 260px); /* Lebar pasti */
+    display: block;
+    padding: 30px;
+}
+
+/* Paksa semua anak dari content container selebar 100% */
+#content, 
+.table-responsive, 
+#tabel-tampil,
+.tombol-tambah-container {
+    width: 100% !important;
+    box-sizing: border-box;
 }
