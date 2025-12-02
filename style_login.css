@@ -1,406 +1,202 @@
-/* style_login.css - Tema Gelap Modern */
+/*
+ * style_login.css - UPGRADE v2.0
+ * Fokus: Shadow Dramatis, Kedalaman Visual, Warna Gelap yang Kaya.
+ */
 
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* 1. Reset Dasar dan Latar Belakang */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all 0.3s ease; /* Tambahkan transisi global untuk kehalusan */
 }
 
-html,
 body {
-  font-size: 62.5%;
-  height: 100%;
-  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  background-color: #0a0a0a;
+    /* Background sedikit lebih kaya (deep charcoal) */
+    background-color: #121212; 
+    color: #f5f5f5; 
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
 }
 
-@media (max-width: 768px) {
-  html,
-  body {
-    font-size: 50%;
-  }
+/* 2. Wrapper Utama */
+.login-wrapper {
+    width: 100%;
+    max-width: 900px; 
+    text-align: center;
 }
 
-.cont {
-  position: relative;
-  height: 100%;
-  background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+/* 3. Judul Utama - Sentuhan CHAOS DRAMATIS */
+.chaos-title {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5em; 
+    color: #ffda47; /* Warna emas yang lebih cerah */
+    margin-bottom: 40px;
+    letter-spacing: 7px;
+    text-transform: uppercase;
+    
+    /* EFEK SHADOW CHAOS (Multiple Text Shadows) */
+    text-shadow: 
+        0 0 5px rgba(255, 230, 0, 0.6), 
+        0 0 15px rgba(255, 200, 0, 0.4), 
+        0 0 30px rgba(255, 180, 0, 0.2), 
+        2px 2px 3px #000; 
 }
 
-/* Efek partikel/chaos */
-.cont:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(187, 134, 252, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(187, 134, 252, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(187, 134, 252, 0.05) 0%, transparent 50%);
-  animation: chaosFloat 20s infinite linear;
+/* 4. Container Form & Gambar (Flexbox untuk Penempatan Samping) */
+.login-container {
+    display: flex;
+    background-color: #1f1f1f; 
+    border-radius: 15px; 
+    
+    /* Box Shadow yang lebih dalam dan menyebar */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 
+                0 0 0 1px rgba(255, 255, 255, 0.05); 
+    
+    overflow: hidden;
+    width: 100%;
+    transition: transform 0.3s ease;
 }
 
-@keyframes chaosFloat {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(-10px, -10px) rotate(1deg);
-  }
-  50% {
-    transform: translate(5px, 10px) rotate(-1deg);
-  }
-  75% {
-    transform: translate(10px, -5px) rotate(1deg);
-  }
+/* Interaksi ringan pada container */
+.login-container:hover {
+    transform: translateY(-3px);
 }
 
-.demo {
-  position: relative;
-  width: 30rem;
-  height: 38rem;
-  z-index: 10;
+/* 5. Sisi Gambar (Kiri) - Sentuhan Merah Chaos */
+.login-image-side {
+    flex: 1;
+    /* Gradien Merah Gelap yang lebih kaya */
+    background: linear-gradient(145deg, #4d0000 0%, #7a0000 100%); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+    /* Memberi shadow di perbatasan internal */
+    box-shadow: inset -5px 0 10px rgba(0, 0, 0, 0.3); 
 }
 
-.login {
-  position: relative;
-  height: 100%;
-  background: rgba(26, 26, 26, 0.95);
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 
-    0 10px 30px rgba(0, 0, 0, 0.5),
-    0 1px 0 rgba(187, 134, 252, 0.1) inset,
-    0 -1px 0 rgba(187, 134, 252, 0.1) inset;
-  border: 1px solid rgba(187, 134, 252, 0.2);
-  transition: transform 0.3s cubic-bezier(0.17, -0.65, 0.665, 1.25);
+.login-image-side img {
+    max-width: 90%;
+    height: auto;
+    border-radius: 6px;
+    opacity: 0.85; 
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
-.login:hover {
-  transform: translateY(-5px);
-  box-shadow: 
-    0 15px 40px rgba(0, 0, 0, 0.6),
-    0 1px 0 rgba(187, 134, 252, 0.2) inset,
-    0 -1px 0 rgba(187, 134, 252, 0.2) inset;
+.image-caption {
+    margin-top: 15px;
+    font-size: 0.9em;
+    font-style: italic;
+    color: #e0e0e0;
+    text-shadow: 1px 1px 2px #000;
 }
 
-.login__check {
-  position: absolute;
-  top: 16rem;
-  left: 13.5rem;
-  width: 14rem;
-  height: 2.8rem;
-  background: rgba(187, 134, 252, 0.8);
-  transform-origin: 0 100%;
-  transform: rotate(-45deg);
-  filter: blur(2px);
-  opacity: 0.5;
-  animation: checkGlow 4s infinite ease-in-out;
+/* 6. Sisi Form (Kanan) */
+.login-form-side {
+    flex: 1;
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-@keyframes checkGlow {
-  0%, 100% {
-    opacity: 0.3;
-    box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
-  }
-  50% {
-    opacity: 0.6;
-    box-shadow: 0 0 20px rgba(187, 134, 252, 0.6);
-  }
+.login-form-side h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2em;
+    margin-bottom: 35px;
+    color: #ffda47;
+    text-shadow: 0 0 8px rgba(255, 218, 71, 0.4);
 }
 
-.login__check:before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 100%;
-  width: 2.8rem;
-  height: 5.2rem;
-  background: rgba(187, 134, 252, 0.8);
-  box-shadow: inset -0.2rem -2rem 2rem rgba(0, 0, 0, 0.2);
+/* 7. Input Group */
+.input-group {
+    text-align: left;
+    margin-bottom: 25px;
 }
 
-.login__form {
-  position: absolute;
-  top: 45%;
-  left: 0;
-  width: 100%;
-  height: 55%;
-  padding: 2.5rem 2.5rem 1.5rem;
-  text-align: center;
-  transform: translateY(-50%);
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 1em;
+    color: #cccccc;
 }
 
-.login__row {
-  height: 5rem;
-  padding-top: 1rem;
-  border-bottom: 1px solid rgba(187, 134, 252, 0.3);
-  margin-bottom: 2rem;
-  position: relative;
-  transition: border-color 0.3s;
+/* 8. Input Fields (Interaktif dan Deep) */
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    background-color: #121212; 
+    color: #ffffff;
+    font-size: 1.1em;
+    /* Shadow inset untuk kesan cekung */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6); 
 }
 
-.login__row:hover {
-  border-bottom-color: rgba(187, 134, 252, 0.6);
+.input-group input:focus {
+    border-color: #ffda47;
+    box-shadow: 0 0 10px rgba(255, 218, 71, 0.6), 
+                inset 0 1px 3px rgba(0, 0, 0, 0.6);
+    outline: none;
+    background-color: #1a1a1a;
 }
 
-.login__icon {
-  margin-bottom: -0.4rem;
-  margin-right: 1rem;
-  width: 2rem;
-  height: 2rem;
+/* 9. Tombol Login (Interaktif) */
+.login-button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 25px;
+    background-color: #ffda47;
+    color: #121212;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: 900; 
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    text-transform: uppercase;
 }
 
-.login__icon path {
-  stroke: rgba(187, 134, 252, 0.8);
-  fill: none;
-  stroke-width: 2;
-  transition: stroke 0.3s;
+.login-button:hover {
+    background-color: #e6c200;
+    transform: translateY(-3px); 
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.4);
 }
 
-.login__row:hover .login__icon path {
-  stroke: #BB86FC;
-}
-
-.login__icon.name path {
-  stroke-dasharray: 73.50196075439453;
-  stroke-dashoffset: 73.50196075439453;
-  animation: animatePath 2s 0.5s forwards;
-}
-
-.login__icon.pass path {
-  stroke-dasharray: 92.10662841796875;
-  stroke-dashoffset: 92.10662841796875;
-  animation: animatePath 2s 0.8s forwards;
-}
-
-.login__input {
-  display: inline-block;
-  width: calc(100% - 4rem);
-  height: 100%;
-  padding-left: 0.5rem;
-  font-size: 1.6rem;
-  background: transparent;
-  color: #E0E0E0;
-  border: none;
-  font-family: 'Open Sans', sans-serif;
-  transition: color 0.3s;
-}
-
-.login__input:focus {
-  outline: none;
-  color: #FFFFFF;
-}
-
-.login__input::placeholder {
-  color: rgba(224, 224, 224, 0.5);
-}
-
-.login__submit {
-  position: relative;
-  width: 100%;
-  height: 4.5rem;
-  margin: 3rem 0 2rem;
-  color: #121212;
-  background: linear-gradient(135deg, #BB86FC 0%, #9C64F4 100%);
-  font-size: 1.6rem;
-  border-radius: 25px;
-  cursor: pointer;
-  overflow: hidden;
-  border: none;
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: all 0.3s;
-  box-shadow: 0 5px 15px rgba(187, 134, 252, 0.3);
-}
-
-.login__submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(187, 134, 252, 0.4);
-  background: linear-gradient(135deg, #BB86FC 0%, #A575FF 100%);
-}
-
-.login__submit:active {
-  transform: translateY(0);
-  box-shadow: 0 3px 10px rgba(187, 134, 252, 0.3);
-}
-
-.login__submit:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -1.5rem;
-  margin-top: -1.5rem;
-  width: 3rem;
-  height: 3rem;
-  border: 2px dotted #121212;
-  border-radius: 50%;
-  border-left: none;
-  border-bottom: none;
-  transition: opacity 0.1s 0.4s;
-  opacity: 0;
-}
-
-.login__submit.processing {
-  width: 4.5rem;
-  font-size: 0;
-  margin-left: calc(50% - 2.25rem);
-}
-
-.login__submit.processing:after {
-  opacity: 1;
-  animation: rotate 0.8s infinite linear;
-}
-
-.login__submit.success {
-  background: linear-gradient(135deg, #50d2c2 0%, #3dc1af 100%);
-}
-
-.login__signup {
-  font-size: 1.3rem;
-  color: rgba(224, 224, 224, 0.7);
-  margin-top: 2rem;
-}
-
-.login__signup a {
-  color: #BB86FC;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s;
-  position: relative;
-}
-
-.login__signup a:hover {
-  color: #D0A8FF;
-}
-
-.login__signup a:after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #BB86FC, transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.login__signup a:hover:after {
-  opacity: 1;
-}
-
-/* Animations */
-@keyframes rotate {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes animatePath {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Ripple effect */
-.ripple {
-  position: absolute;
-  width: 15rem;
-  height: 15rem;
-  margin-left: -7.5rem;
-  margin-top: -7.5rem;
-  background: rgba(187, 134, 252, 0.3);
-  transform: scale(0);
-  animation: animRipple 0.6s;
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-@keyframes animRipple {
-  to {
-    transform: scale(3.5);
-    opacity: 0;
-  }
-}
-
-/* Floating text effect */
-.floating-text {
-  position: absolute;
-  top: 30px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  color: #BB86FC;
-  font-size: 2.4rem;
-  font-weight: 300;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  opacity: 0.9;
-  animation: floatText 3s infinite ease-in-out;
-}
-
-@keyframes floatText {
-  0%, 100% {
+.login-button:active {
     transform: translateY(0);
-    text-shadow: 0 0 10px rgba(187, 134, 252, 0.5);
-  }
-  50% {
-    transform: translateY(-10px);
-    text-shadow: 0 0 20px rgba(187, 134, 252, 0.8);
-  }
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-/* Responsive adjustments */
-@media (max-width: 480px) {
-  .demo {
-    width: 90%;
-    max-width: 30rem;
-  }
-  
-  .login__form {
-    padding: 2rem 1.5rem 1rem;
-  }
-  
-  .floating-text {
-    font-size: 2rem;
-    top: 20px;
-  }
-}
+/* Responsiveness untuk tampilan mobile */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column; 
+    }
 
-/* Title styling */
-.login-title {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  color: #FFFFFF;
-  font-size: 2.8rem;
-  font-weight: 300;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  opacity: 0.9;
-  text-shadow: 0 2px 10px rgba(187, 134, 252, 0.3);
-}
-
-.login-title:after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #BB86FC, transparent);
-  margin: 10px auto 0;
+    .chaos-title {
+        font-size: 2.5em;
+        letter-spacing: 5px;
+    }
+    
+    .login-image-side {
+        /* Gambar di mobile hanya di bagian atas, tanpa border internal */
+        box-shadow: none;
+        border-bottom: 3px solid #ffda47;
+    }
+    
+    .login-form-side {
+        padding: 40px 30px;
+    }
 }
