@@ -1,7 +1,7 @@
 <?php
 include "koneksi.php";
 
-// Fungsi untuk debugging MySQL
+// Fungsi untuk debugging MySQL (VERSI CHAOS - BIAR GAMPANG LACAK ERROR)
 function debug_query($db, $query, $query_name = "Query") {
     if (!$query) {
         echo "<div style='background: #330000; border: 1px solid red; padding: 10px; color: #ffcccc; margin-bottom: 10px;'>";
