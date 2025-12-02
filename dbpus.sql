@@ -5,12 +5,9 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-<<<<<<< HEAD
-=======
 -- Pastikan database yang benar digunakan (HANYA JIKA ANDA TIDAK MENGIMPOR LANGSUNG)
 -- USE dbpus; 
 
->>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -25,7 +22,7 @@ CREATE TABLE `tbanggota` (
   `nama` varchar(30) NOT NULL,
   `jeniskelamin` varchar(10) NOT NULL,
   `alamat` varchar(40) NOT NULL,
-<<<<<<< HEAD
+
   `nohp` varchar(15) DEFAULT NULL, -- DITAMBAHKAN
 =======
   `nohp` varchar(15) DEFAULT NULL, -- KOLOM TAMBAHAN UNTUK nohp
@@ -34,13 +31,10 @@ CREATE TABLE `tbanggota` (
   `foto` varchar(35) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-<<<<<<< HEAD
-=======
 --
 -- Dumping data for table `tbanggota`
 --
 
->>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
 INSERT INTO `tbanggota` (`idanggota`, `nama`, `jeniskelamin`, `alamat`, `nohp`, `status`, `foto`) VALUES
 ('AG002', 'Aini Rahmawati', 'Wanita', 'Jl.Anggrek No 45', NULL, 'Sedang Meminjam', 'AG002.jpg'),
 ('AG003', 'Rudi Hartono', 'Pria', 'Jl.Manggis 98', NULL, 'Sedang Meminjam', ''),
@@ -83,11 +77,7 @@ INSERT INTO `tbbuku` (`idbuku`, `judulbuku`, `kategori`, `pengarang`, `penerbit`
 ('BK013', 'Dermaga Biru', 'Karya Sastra', 'Sutejo', 'Media Cipta', 'Tersedia');
 
 --
-<<<<<<< HEAD
 -- Table structure for table `tbtransaksi` (UPGRADED: Menambahkan status_pengembalian & denda)
-=======
--- Table structure for table `tbtransaksi` (UPGRADED: Menambahkan status_pengembalian)
->>>>>>> c15bd4d57d295ed13a547d4a807210918722a286
 --
 
 CREATE TABLE `tbtransaksi` (
@@ -96,7 +86,7 @@ CREATE TABLE `tbtransaksi` (
   `idbuku` varchar(5) NOT NULL,
   `tglpinjam` date NOT NULL,
   `tglkembali` date NOT NULL,
-<<<<<<< HEAD
+
   `status_pengembalian` varchar(20) NOT NULL DEFAULT 'Dipinjam', -- DITAMBAHKAN
   `denda` int(11) NOT NULL DEFAULT 0                         -- DITAMBAHKAN
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -151,7 +141,7 @@ CREATE TABLE `tbpengembalian` (
   `idpengembalian` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `idanggota` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `idbuku` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-<<<<<<< HEAD
+
   `idtransaksi` varchar(5) DEFAULT NULL, -- DITAMBAHKAN
 =======
   `idtransaksi` varchar(5) DEFAULT NULL, -- KOLOM PENTING DITAMBAHKAN UNTUK JOIN
