@@ -29,7 +29,7 @@ if(isset($_SESSION['user'])) {
                 <!-- Sisi Kiri: Gambar/Ilustrasi (Merah Chaos) -->
                 <div class="login-image-side">
                     <!-- Pastikan path ke gambar Anda benar! -->
-                    <img src="assets/img/chaos_image.png" alt="Chaos Library Illustration">
+                    <img src="images/bukumewah.jpeg" alt="Chaos Library Illustration">
                     <p class="image-caption">Ji Simpang Karue Rumah Yohanes</p>
                 </div>
 
