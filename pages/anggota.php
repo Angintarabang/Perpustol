@@ -1,119 +1,128 @@
 <div id="label-page"><h3>Tampil Data Anggota</h3></div>
+
 <div id="content">
-	
-	<p id="tombol-tambah-container"><a href="index.php?p=anggota-input" class="tombol">Tambah Anggota</a>
-	<a target="_blank" href="pages/cetak.php"><img src="print.png" height="50px" height="50px"></a>
-	<FORM CLASS="form-inline" METHOD="POST">
-	<div align="right"><form method=post><input type="text" name="pencarian"><input type="submit" name="search" value="search" class="tombol"></form>
-	</FORM>
-	</p>
-	<table id="tabel-tampil">
-		<tr>
-			<th id="label-tampil-no">No</td>
-			<th>ID Anggota</th>
-			<th>Nama</th>
-			<th>Foto</th>
-			<th>Jenis Kelamin</th>
-			<th>Alamat</th>
-			<th>No HP</th>
-			<th id="label-opsi">Opsi</th>
-		</tr>
-		<?php
-		$batas = 10;
-		extract($_GET);
-		if(empty($hal)){
-			$posisi = 0;
-			$hal = 1;
-			$nomor = 1;
-		}
-		else {
-			$posisi = ($hal - 1) * $batas;
-			$nomor = $posisi+1;
-		}	
-		if($_SERVER['REQUEST_METHOD'] == "POST"){
-			$pencarian = trim(mysqli_real_escape_string($db, $_POST['pencarian']));
-			if($pencarian != ""){
-				$sql = "SELECT * FROM tbanggota WHERE nama LIKE '%$pencarian%'
-						OR idanggota LIKE '%$pencarian%'
-						OR jeniskelamin LIKE '%$pencarian%'
-						OR alamat LIKE '%$pencarian%'";
-				
-				$query = $sql;
-				$queryJml = $sql;	
-						
-			}
-			else {
-				$query = "SELECT * FROM tbanggota LIMIT $posisi, $batas";
-				$queryJml = "SELECT * FROM tbanggota";
-				$no = $posisi * 1;
-			}			
-		}
-		else {
-			$query = "SELECT * FROM tbanggota LIMIT $posisi, $batas";
-			$queryJml = "SELECT * FROM tbanggota";
-			$no = $posisi * 1;
-		}
-		
-		//$sql="SELECT * FROM tbanggota ORDER BY idanggota DESC";
-		$q_tampil_anggota = mysqli_query($db, $query);
-		if(mysqli_num_rows($q_tampil_anggota)>0)
-		{
-		while($r_tampil_anggota=mysqli_fetch_array($q_tampil_anggota)){
-			if(empty($r_tampil_anggota['foto'])or($r_tampil_anggota['foto']=='-'))
-				$foto = "admin-no-photo.jpg";
-			else
-				$foto = $r_tampil_anggota['foto'];
-		?>
-		<tr>
-			<td><?php echo $nomor; ?></td>
-			<td><?php echo $r_tampil_anggota['idanggota']; ?></td>
-			<td><?php echo $r_tampil_anggota['nama']; ?></td>
-			<td><img src="images/<?php echo $foto; ?>" width=70px height=70px></td>
-			<td><?php echo $r_tampil_anggota['jeniskelamin']; ?></td>
-			<td><?php echo $r_tampil_anggota['alamat']; ?></td>
-			<td><?php echo $r_tampil_anggota['nohp']; ?></td>
-			<td>
-				<div class="tombol-opsi-container"><a target="_blank" href="pages/cetak_kartu.php?id=<?php echo $r_tampil_anggota['idanggota'];?>" class="tombol">Cetak Detail</a></div>
-				<div class="tombol-opsi-container"><a href="index.php?p=anggota-edit&id=<?php echo $r_tampil_anggota['idanggota'];?>" class="tombol">Edit</a></div>
-				<div class="tombol-opsi-container"><a href="proses/anggota-hapus.php?id=<?php echo $r_tampil_anggota['idanggota']; ?>" onclick = "return confirm ('Apakah Anda Yakin Akan Menghapus Data Ini?')" class="tombol">Hapus</a></div>
-			</td>			
-		</tr>		
-		<?php $nomor++; } 
-		}
-		else {
-			echo "<tr><td colspan=6>Data Tidak Ditemukan</td></tr>";
-		}?>		
-	</table>
-	<?php
-	if(isset($_POST['pencarian'])){
-	if($_POST['pencarian']!=''){
-		echo "<div style=\"float:left;\">";
-		$jml = mysqli_num_rows(mysqli_query($db, $queryJml));
-		echo "Data Hasil Pencarian: <b>$jml</b>";
-		echo "</div>";
-	}
-	}
-	else{ ?>
-		<div style="float: left;">		
-		<?php
-			$jml = mysqli_num_rows(mysqli_query($db, $queryJml));
-			echo "Jumlah Data : <b>$jml</b>";
-		?>			
-		</div>		
-		<div class="pagination">		
-				<?php
-				$jml_hal = ceil($jml/$batas);
-				for($i=1; $i<=$jml_hal; $i++){
-					if($i != $hal){
-						echo "<a href=\"?p=anggota&hal=$i\">$i</a>";
-					}
-					else {
-						echo "<a class=\"active\">$i</a>";
-					}
-				}
-				?>
-		</div>
-	<?php
-	}
-	?>
+
+    <!-- Container Tombol & Pencarian -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        
+        <!-- Tombol Tambah & Cetak (Kiri) -->
+        <div class="tombol-tambah-container" style="margin-bottom: 0;">
+            <a href="index.php?p=anggota-input" class="tombol">Tambah Anggota</a>
+            
+            <!-- Tombol Print Icon -->
+            <a target="_blank" href="pages/cetak.php">
+                <img src="print.png" alt="Cetak" style="height: 40px; width: auto; vertical-align: middle; margin-left: 5px;">
+            </a>
+        </div>
+
+        <!-- Form Pencarian (Kanan) -->
+        <form action="" method="post" style="display: flex; gap: 5px;">
+            <input type="text" name="pencarian" class="isian-formulir" placeholder="Cari ID atau Nama..." style="margin: 0; padding: 10px; width: 250px;">
+            <input type="submit" name="search" value="Search" class="tombol" style="margin: 0;">
+        </form>
+
+    </div>
+
+    <!-- TABEL DATA ANGGOTA (NO HP SUDAH DIHAPUS) -->
+    <div style="overflow-x: auto; width: 100%;">
+        <table id="tabel-tampil">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>ID Anggota</th>
+                    <th>Nama</th>
+                    <th>Foto</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Alamat</th>
+                    <!-- Kolom No HP DIHAPUS -->
+                    <th>Opsi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Logika Pencarian
+                $batas = 5;
+                $hal = isset($_GET['hal']) ? (int)$_GET['hal'] : 1;
+                $posisi = ($hal - 1) * $batas;
+
+                $sql = "SELECT * FROM tbanggota";
+                if(isset($_POST['search']) && $_POST['pencarian'] != ''){
+                    $kunci = $_POST['pencarian'];
+                    $sql .= " WHERE nama LIKE '%$kunci%' OR idanggota LIKE '%$kunci%'";
+                    $posisi = 0; // Reset ke halaman 1 kalo nyari
+                }
+                
+                // Order by ID descending biar data baru di atas
+                $sql .= " ORDER BY idanggota DESC LIMIT $posisi, $batas";
+                
+                $q_tampil_anggota = mysqli_query($db, $sql);
+                $nomor = $posisi + 1;
+
+                if(mysqli_num_rows($q_tampil_anggota) > 0){
+                    while($r_tampil_anggota = mysqli_fetch_array($q_tampil_anggota)){
+                        
+                        // Cek Foto
+                        $foto_path = "images/" . $r_tampil_anggota['foto'];
+                        if(empty($r_tampil_anggota['foto']) || !file_exists($foto_path)){
+                            $foto_tampil = "images/avatar-default.png";
+                        } else {
+                            $foto_tampil = $foto_path;
+                        }
+                ?>
+                <tr>
+                    <td><?php echo $nomor++; ?></td>
+                    <td><?php echo $r_tampil_anggota['idanggota']; ?></td>
+                    <td><?php echo $r_tampil_anggota['nama']; ?></td>
+                    <td style="text-align: center;">
+                        <img src="<?php echo $foto_tampil; ?>" width="60" height="60" style="border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-primary);">
+                    </td>
+                    <td><?php echo $r_tampil_anggota['jeniskelamin']; ?></td>
+                    <td><?php echo $r_tampil_anggota['alamat']; ?></td>
+                    
+                    <!-- Kolom Data No HP DIHAPUS -->
+
+                    <td style="text-align: center;">
+                        <a target="_blank" href="pages/cetak-kartu.php?id=<?php echo $r_tampil_anggota['idanggota']; ?>" class="tombol" style="font-size: 0.8em; margin-bottom: 5px;">Cetak Detail</a>
+                        
+                        <div style="margin-top: 5px;">
+                            <a href="index.php?p=anggota-edit&id=<?php echo $r_tampil_anggota['idanggota']; ?>" class="tombol" style="background: #333; border: 1px solid #555;">Edit</a>
+                            
+                            <a href="proses/anggota-hapus.php?id=<?php echo $r_tampil_anggota['idanggota']; ?>" 
+                               onclick="return confirm('Yakin mau menghapus data anggota <?php echo $r_tampil_anggota['nama']; ?>?')" 
+                               class="tombol" style="background: linear-gradient(135deg, #500000, #300000); color: #ffcccc;">Hapus</a>
+                        </div>
+                    </td>
+                </tr>
+                <?php 
+                    }
+                } else {
+                    echo "<tr><td colspan='7' style='text-align:center; padding: 20px; font-style:italic;'>Data tidak ditemukan</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination (Tetap Ada) -->
+    <div style="margin-top: 20px; text-align: center;">
+        <?php
+        $jml_data_query = "SELECT COUNT(*) as jml FROM tbanggota";
+        if(isset($_POST['search']) && $_POST['pencarian'] != ''){
+            $kunci = $_POST['pencarian'];
+            $jml_data_query .= " WHERE nama LIKE '%$kunci%' OR idanggota LIKE '%$kunci%'";
+        }
+        $jml_data = mysqli_fetch_array(mysqli_query($db, $jml_data_query))['jml'];
+        $jml_hal = ceil($jml_data / $batas);
+
+        for($i = 1; $i <= $jml_hal; $i++){
+            $active_style = ($i == $hal) ? "background-color: var(--gold-primary); color: black; font-weight:bold;" : "background-color: #333;";
+            if($i != $hal){
+                echo "<a href='index.php?p=anggota&hal=$i' class='tombol' style='$active_style margin: 0 2px;'>$i</a>";
+            } else {
+                echo "<span class='tombol' style='$active_style margin: 0 2px; cursor: default;'>$i</span>";
+            }
+        }
+        ?>
+    </div>
+
 </div>

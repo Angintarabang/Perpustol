@@ -1,8 +1,6 @@
-/* 
- * STYLE.CSS - DASHBOARD OF CHAOS (FIXED & POLISHED)
- * Level: GOD TIER DESIGN
- * Status: ERROR FREE & FULL WIDTH
- */
+/* =========================================
+   STYLE.CSS - THEME CHAOS PERPUSTAKAAN
+   ========================================= */
 
 :root {
     /* PALET WARNA CHAOS */
@@ -462,4 +460,84 @@ input:-webkit-autofill:active{
 .tombol-tambah-container {
     width: 100% !important;
     box-sizing: border-box;
+}
+/* =========================================
+   TAMBAHAN: TOMBOL PRINT & FORM INPUT MODERN
+   ========================================= */
+
+/* --- FIX TOMBOL PRINT & ACTION HEADER --- */
+.tombol-tambah-container {
+    display: flex; /* Biar sejajar */
+    align-items: center; /* Rata tengah vertikal */
+    gap: 10px; /* Jarak antar tombol */
+    margin-bottom: 20px;
+    /* width: 100% !important; <--- Ini udah ada di kode atas lu, jadi aman */
+}
+
+/* Style khusus icon print biar gak gepeng & ada efeknya */
+.tombol-tambah-container img {
+    height: 40px; /* Sesuaikan tinggi sama tombol */
+    width: auto;
+    border-radius: 5px;
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+.tombol-tambah-container img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px var(--gold-primary); /* Glow Emas */
+}
+
+/* --- FORM STYLE (MODERN DIV LAYOUT - NO TABLES) --- */
+.chaos-form-container {
+    max-width: 800px;
+    margin: 0 auto; /* Tengahin form */
+}
+
+.form-group {
+    margin-bottom: 25px; /* Jarak antar input */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--gold-primary);
+    font-weight: 600;
+    font-size: 1em;
+    letter-spacing: 1px;
+}
+
+/* Radio Button Group (Pria/Wanita Sejajar) */
+.radio-group {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05); /* Latar transparan */
+    border: 1px solid #333;
+    border-radius: 6px;
+}
+
+.radio-group label {
+    margin-bottom: 0; 
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+input[type="radio"] {
+    accent-color: var(--gold-primary); /* Warna titik radio jadi emas */
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Input File Custom */
+input[type="file"] {
+    padding: 10px;
+    background: #111;
+    color: #ccc;
+    border: 1px solid #444;
 }
