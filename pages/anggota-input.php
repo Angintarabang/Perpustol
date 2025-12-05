@@ -1,36 +1,56 @@
-<div id="label-page"><h3>Input Data Anggota</h3></div>
+<!-- FILE: pages/anggota-input.php -->
+<!-- Isinya HANYA Tampilan Form -->
+
+<div id="label-page"><h3>Input Data Anggota Chaos</h3></div>
+
 <div id="content">
-	<form action="proses/anggota-input-proses.php" method="post" enctype="multipart/form-data">
-	
-	<table id="tabel-input">
-		<tr>
-			<td class="label-formulir">FOTO</td>
-			<td class="isian-formulir"><input type="file" name="foto" class="isian-formulir isian-formulir-border"></td>
-		</tr>
-		<tr>
-			<td class="label-formulir">ID Anggota</td>
-			<td class="isian-formulir"><input type="text" name="id_anggota" class="isian-formulir isian-formulir-border"></td>
-		</tr>
-		<tr>
-			<td class="label-formulir">Nama</td>
-			<td class="isian-formulir"><input type="text" name="nama" class="isian-formulir isian-formulir-border"></td>
-		</tr>
-		<tr>
-			<td class="label-formulir">Jenis Kelamin</td>
-			<td class="isian-formulir"><input type="radio" name="jenis_kelamin" value="Pria">Pria</label></td>
-		</tr>
-		<tr>
-			<td class="label-formulir"></td>
-			<td class="isian-formulir"><input type="radio" name="jenis_kelamin" value="Wanita">Wanita</td>
-		</tr>
-		<tr>
-			<td class="label-formulir">Alamat</td>
-			<td class="isian-formulir"><textarea rows="2" cols="40" name="alamat" class="isian-formulir isian-formulir-border"></textarea></td>
-		</tr>
-		<tr>
-			<td class="label-formulir"></td>
-			<td class="isian-formulir"><input type="submit" name="simpan" value="Simpan" class="tombol"></td>
-		</tr>
-	</table>
-	</form>
+    <div class="chaos-form-container">
+        <!-- Perhatikan action-nya mengarah ke folder proses -->
+        <form action="proses/anggota-input-proses.php" method="post" enctype="multipart/form-data">
+        
+            <!-- ID Anggota -->
+            <div class="form-group">
+                <label>ID Anggota</label>
+                <input type="text" name="id_anggota" class="isian-formulir" placeholder="Contoh: AG001" required>
+            </div>
+
+            <!-- Nama -->
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" name="nama" class="isian-formulir" placeholder="Masukkan Nama Anggota" required>
+            </div>
+
+            <!-- Jenis Kelamin -->
+            <div class="form-group">
+                <label>Jenis Kelamin</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="jenis_kelamin" value="Pria" required> Pria
+                    </label>
+                    <label>
+                        <input type="radio" name="jenis_kelamin" value="Wanita"> Wanita
+                    </label>
+                </div>
+            </div>
+
+            <!-- Alamat -->
+            <div class="form-group">
+                <label>Alamat Lengkap</label>
+                <textarea rows="4" name="alamat" class="isian-formulir" placeholder="Masukkan Alamat..." required></textarea>
+            </div>
+
+            <!-- Foto -->
+            <div class="form-group">
+                <label>Foto Anggota</label>
+                <input type="file" name="foto" class="isian-formulir" accept="image/*">
+                <div style="font-size: 0.8em; color: #666; margin-top: 5px;">*Format: JPG/PNG. Kosongkan jika tidak ada foto.</div>
+            </div>
+
+            <!-- Tombol Simpan -->
+            <div class="form-group" style="margin-top: 30px;">
+                <input type="submit" name="simpan" value="SIMPAN DATA" class="tombol" style="width: 100%; padding: 15px; font-size: 1.1em;">
+            </div>
+
+        </form>
+    </div>
 </div>
