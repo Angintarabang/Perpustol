@@ -14,9 +14,9 @@
 <!-- CONTAINER TEAM -->
 <div class="profile-card-wrapper">
     
-    <!-- KARTU 1: LU (DESIGNER) -->
+    <!-- KARTU 1: (DESIGNER) -->
     <div class="profile-card">
-        <img src="images/ganteng.jpg" class="profile-img">
+        <img src="images/goodman.jpg" class="profile-img">
         <h3>NGAB IBOR</h3>
         <p style="color: #ccc; font-weight: bold;">CHAOS ARCHITECT</p>
         <p style="font-size: 0.9em; margin-top: 10px; color: var(--gold-primary);">
@@ -36,7 +36,7 @@
 
     <!-- KARTU 3: PROGRAMMER 2 -->
     <div class="profile-card">
-        <img src="images/sahril.jpg" class="profile-img">
+        <img src="images/sahrilv2.jpg" class="profile-img">
         <h3>THE SAHRIL</h3>
         <p style="color: #ccc; font-weight: bold;">DATABASE MASTER</p>
         <p style="font-size: 0.9em; margin-top: 10px; color:var(--gold-primary);">
