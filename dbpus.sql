@@ -153,7 +153,7 @@ CREATE TABLE `tbuser` (
 
 -- Ganti admin jadi Chaos Team (Opsional)
 INSERT INTO `tbuser` (`iduser`, `nama`, `alamat`, `password`) VALUES
-('jwd', 'Admin Chaos', 'Perpustakaan Pusat', '1234');
+('bijikajung', 'Admin Chaos', 'Perpustakaan Pusat', 'woekerjaincoek');
 
 --
 -- Indexes for tables
