@@ -36,7 +36,7 @@ if(isset($_SESSION['user'])) {
                 <!-- Sisi Kanan: Form Login (Dark Slate) -->
                 <div class="login-form-side">
                     <h2>LOGIN</h2>
-                    <form method="post" action="cek_login.php">
+                    <form method="post" action="proses/cek_login.php">
                         
                         <div class="input-group">
                             <label for="user">Username</label>

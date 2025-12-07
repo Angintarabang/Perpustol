@@ -78,10 +78,11 @@
                             <a href="index.php?p=buku-edit&id=<?php echo $r_tampil_buku['idbuku']; ?>" class="tombol" style="background: #333; border: 1px solid #555; padding: 8px 12px; font-size: 0.85em;">Edit</a>
                             
                             <!-- INI PERBAIKAN LINK HAPUS BIAR GAK NYASAR KE DASHBOARD -->
-                            <a href="proses/buku-hapus.php?id=<?php echo $r_tampil_buku['idbuku']; ?>" 
-                               onclick="return confirm('Hapus buku <?php echo $r_tampil_buku['judulbuku']; ?>?')" 
-                               class="tombol" 
-                               style="background: linear-gradient(135deg, #500000, #300000); color: #ffcccc; padding: 8px 12px; font-size: 0.85em;">Hapus</a>
+                           <a href="#" 
+   onclick="konfirmasiHapus(event, 'proses/buku-hapus.php?id=<?= $r_tampil_buku['idbuku']; ?>', 'Buku <?= $r_tampil_buku['judulbuku']; ?>')"
+   class="tombol" style="background: linear-gradient(135deg, #500000, #300000); color: #ffcccc; padding: 8px 12px; font-size: 0.85em;">
+   Hapus
+</a>
                         </div>
                     </td>
                 </tr>

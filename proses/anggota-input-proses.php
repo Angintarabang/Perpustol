@@ -1,6 +1,5 @@
 <?php
-// FILE: proses/anggota-input-proses.php
-include "../koneksi.php"; // PENTING: Panggil koneksi database
+include "../koneksi.php";
 
 // Cek apakah tombol simpan ditekan
 if(isset($_POST['simpan'])){
@@ -16,11 +15,11 @@ if(isset($_POST['simpan'])){
     if(isset($_FILES['foto']['name']) && $_FILES['foto']['name'] != "") {
         $foto_nama = $_FILES['foto']['name'];
         $foto_tmp = $_FILES['foto']['tmp_name'];
-        // Pastikan nama foto unik biar gak bentrok (pake tanggal jam detik)
+        
+        // Buat nama unik biar gak bentrok
         $foto_baru = date('dmYHis').$foto_nama;
         $path = "../images/".$foto_baru; 
 
-        // Cek folder images ada atau ngga, kalau ngga ada jangan upload
         if(move_uploaded_file($foto_tmp, $path)){
             $foto_fix = $foto_baru;
         } else {

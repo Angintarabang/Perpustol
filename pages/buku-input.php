@@ -1,56 +1,46 @@
 <div id="label-page"><h3>Input Data Buku</h3></div>
 
 <div id="content">
-<form action="index.php?p=buku-input" method="post">
-<table id="tabel-input">
-    <tr>
-        <td>ID Buku</td>
-        <td><input type="text" name="idbuku" required></td>
-    </tr>
-    <tr>
-        <td>Judul</td>
-        <td><input type="text" name="judulbuku" required></td>
-    </tr>
-    <tr>
-        <td>Kategori</td>
-        <td><input type="text" name="kategori"></td>
-    </tr>
-    <tr>
-        <td>Pengarang</td>
-        <td><input type="text" name="pengarang"></td>
-    </tr>
-    <tr>
-        <td>Penerbit</td>
-        <td><input type="text" name="penerbit"></td>
-    </tr>
-    <tr>
-        <td>Status</td>
-        <td>
-            <select name="status">
-                <option>Tersedia</option>
-                <option>Dipinjam</option>
-            </select>
-        </td>
-    </tr>
-</table>
+    <div class="chaos-form-container">
+        
+        <!-- Form Input Buku -->
+        <form action="proses/buku-input-proses.php" method="post">
+        
+            <div class="form-group">
+                <label>ID Buku</label>
+                <input type="text" name="id_buku" class="isian-formulir" placeholder="Contoh: BK001" required>
+            </div>
 
-<input type="submit" name="simpan" value="Simpan" class="tombol">
-</form>
+            <div class="form-group">
+                <label>Judul Buku</label>
+                <input type="text" name="judul_buku" class="isian-formulir" placeholder="Masukkan Judul Buku" required>
+            </div>
 
-<?php
-if(isset($_POST['simpan'])){
-    include "koneksi.php";
+            <!-- INI YANG GW BENERIN: JADI DROPDOWN -->
+            <div class="form-group">
+                <label>Kategori</label>
+                <select name="kategori" class="isian-formulir" required>
+                    <option value="" disabled selected>-- Pilih Kategori --</option>
+                    <option value="Ilmu Komputer">Ilmu Komputer</option>
+                    <option value="Ilmu Agama">Ilmu Agama</option>
+                    <option value="Karya Sastra">Karya Sastra</option>
+                </select>
+            </div>
 
-    $query = mysqli_query($db, "INSERT INTO tbbuku VALUES(
-        '$_POST[idbuku]',
-        '$_POST[judulbuku]',
-        '$_POST[kategori]',
-        '$_POST[pengarang]',
-        '$_POST[penerbit]',
-        '$_POST[status]'
-    )");
+            <div class="form-group">
+                <label>Pengarang</label>
+                <input type="text" name="pengarang" class="isian-formulir" placeholder="Nama Pengarang" required>
+            </div>
 
-    echo "<script>alert('Data berhasil disimpan'); document.location='index.php?p=buku';</script>";
-}
-?>
+            <div class="form-group">
+                <label>Penerbit</label>
+                <input type="text" name="penerbit" class="isian-formulir" placeholder="Nama Penerbit" required>
+            </div>
+
+            <div class="form-group" style="margin-top: 30px;">
+                <input type="submit" name="simpan" value="SIMPAN DATA" class="tombol" style="width: 100%; padding: 15px; font-weight: bold;">
+            </div>
+
+        </form>
+    </div>
 </div>
