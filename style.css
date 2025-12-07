@@ -59,18 +59,20 @@ body {
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
 
-/* --- 2. HEADER: COMMAND CENTER --- */
 #header {
-    width: 100%;
-    height: 80px;
-    background: var(--bg-surface);
-    display: flex;
-    align-items: center;
-    padding: 0 30px;
-    border-bottom: 1px solid rgba(255, 218, 71, 0.2);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.8);
-    position: relative;
-    z-index: 100;
+    width: 100%; 
+    height: 85px; 
+    
+    /* Background Semi Transparan + Gradient Halus */
+    background: linear-gradient(to right, rgba(15, 15, 15, 0.95), rgba(30, 30, 30, 0.95));
+    border-bottom: 2px solid var(--gold-dark); /* Garis Emas di bawah */
+    
+    /* Shadow Emas samar-samar di bawah header */
+    box-shadow: 0 5px 25px rgba(184, 134, 11, 0.15); 
+    
+    display: flex; align-items: center; padding: 0 30px;
+    position: relative; z-index: 100;
+    backdrop-filter: blur(5px);
 }
 
 #header::after {
@@ -111,68 +113,71 @@ body {
 
 /* Header 2 (User Bar) */
 #header2 {
-    width: 100%;
-    height: 40px;
-    background: linear-gradient(90deg, #1a1a1a, #000);
-    color: var(--gold-primary);
+    width: 100%; height: 40px;
+    /* Gradient Emas Gelap Elegan */
+    background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+    color: var(--gold-primary); 
     font-weight: 600;
-    padding: 0 30px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    border-bottom: 1px solid #333;
-    font-size: 0.9em;
+    padding: 0 30px; display: flex; align-items: center; justify-content: flex-end;
+    border-bottom: 1px solid #333; font-size: 0.9em;
+    letter-spacing: 1px;
 }
-
 #nama-user { display: flex; align-items: center; gap: 10px; }
 
 /* --- 3. SIDEBAR: DARK NAVIGATION --- */
+/* --- SIDEBAR BERTEKSTUR --- */
 #sidebar {
-    /* Style dasar sidebar, layoutnya diatur di bagian FIX LAYOUT bawah */
-    background: var(--bg-surface);
-    min-height: calc(100vh - 80px);
-    padding-top: 20px;
-    border-right: 1px solid #222;
+    width: 260px; flex-shrink: 0;
+    
+    /* Background Gradient Vertikal */
+    background: linear-gradient(to bottom, #121212, #080808);
+    
+    min-height: calc(100vh - 85px); 
+    padding-top: 20px; 
+    border-right: 1px solid #333;
+    
+    /* Shadow biar sidebar kayak ngambang di atas konten */
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
 }
 
 .label-navigasi {
-    color: var(--text-muted);
-    font-size: 0.75em;
+    color: #666; 
+    font-size: 0.75em; 
     text-transform: uppercase;
-    letter-spacing: 2px;
-    padding: 15px 25px 5px;
-    font-weight: 700;
+    letter-spacing: 2px; 
+    padding: 20px 25px 5px; 
+    font-weight: 800; 
     margin-top: 10px;
+    
+    /* Garis pemisah halus di atas setiap label */
+    border-top: 1px solid #222;
 }
 
-#sidebar ul { list-style: none; padding: 0 10px; }
-
+/* Menu Hover Effect yang Lebih Smooth */
 #sidebar a {
-    display: block;
-    padding: 12px 15px;
-    color: var(--text-main);
-    text-decoration: none;
-    font-size: 0.95em;
-    border-radius: 6px;
-    margin-bottom: 5px;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid transparent;
+    display: block; padding: 12px 20px; 
+    color: #ccc; text-decoration: none;
+    font-size: 0.95em; 
+    margin: 5px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent; /* Biar gak goyang pas hover */
 }
 
 #sidebar a:hover {
-    background: rgba(255, 218, 71, 0.05);
-    color: var(--gold-primary);
-    padding-left: 20px;
-    border-color: rgba(255, 218, 71, 0.2);
-    box-shadow: inset 0 0 10px rgba(255, 218, 71, 0.05);
+    background: rgba(255, 218, 71, 0.1); 
+    color: var(--gold-primary); 
+    padding-left: 25px; /* Geser Kanan dikit */
+    border-color: rgba(255, 218, 71, 0.3);
+    box-shadow: 0 0 10px rgba(255, 218, 71, 0.1);
 }
 
+/* Menu Aktif (Biar tau lagi di halaman mana) */
 #sidebar a.active {
-    background: linear-gradient(90deg, rgba(255, 218, 71, 0.1), transparent);
-    color: var(--gold-primary);
-    border-left: 3px solid var(--gold-primary);
-    font-weight: 600;
+    background: linear-gradient(90deg, rgba(255, 218, 71, 0.2), transparent);
+    color: var(--gold-primary); 
+    border-left: 4px solid var(--gold-primary);
+    font-weight: bold;
 }
 
 #sidebar a[href*="logout"] {
@@ -692,4 +697,22 @@ input[type="file"] {
 
 .denda-value span {
     color: var(--gold-primary); /* Warna Emas untuk Mata Uang */
+}
+/* --- CUSTOM SWEETALERT CHAOS THEME --- */
+div:where(.swal2-container) div:where(.swal2-popup) {
+    background: #121212 !important; /* Hitam Pekat */
+    border: 1px solid #ffda47 !important; /* Border Emas */
+    color: #f0f0f0 !important; /* Teks Putih */
+}
+
+div:where(.swal2-container) .swal2-title {
+    color: #ffda47 !important; /* Judul Emas */
+    font-family: 'Cinzel', serif !important;
+}
+
+div:where(.swal2-container) button.swal2-styled.swal2-confirm {
+    background: linear-gradient(135deg, #b8860b, #8a6d00) !important;
+    color: #fff !important;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(255, 218, 71, 0.4);
 }

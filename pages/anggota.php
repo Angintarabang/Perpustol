@@ -87,9 +87,11 @@
                         <div style="margin-top: 5px;">
                             <a href="index.php?p=anggota-edit&id=<?php echo $r_tampil_anggota['idanggota']; ?>" class="tombol" style="background: #333; border: 1px solid #555;">Edit</a>
                             
-                            <a href="proses/anggota-hapus.php?id=<?php echo $r_tampil_anggota['idanggota']; ?>" 
-                               onclick="return confirm('Yakin mau menghapus data anggota <?php echo $r_tampil_anggota['nama']; ?>?')" 
-                               class="tombol" style="background: linear-gradient(135deg, #500000, #300000); color: #ffcccc;">Hapus</a>
+                            <a href="#" 
+   onclick="konfirmasiHapus(event, 'proses/anggota-hapus.php?id=<?= $r_tampil_anggota['idanggota']; ?>', 'Anggota <?= $r_tampil_anggota['nama']; ?>')"
+   class="tombol" style="background: linear-gradient(135deg, #500000, #300000); color: #ffcccc;">
+   Hapus
+</a>
                         </div>
                     </td>
                 </tr>

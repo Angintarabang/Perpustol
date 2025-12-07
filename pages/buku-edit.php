@@ -1,43 +1,52 @@
-<?php
-include "koneksi.php";
-$id = $_GET['id'];
-$data = mysqli_fetch_array(mysqli_query($db, "SELECT * FROM tbbuku WHERE idbuku='$id'"));
-?>
 <div id="label-page"><h3>Edit Data Buku</h3></div>
 
 <div id="content">
-<form action="" method="post">
-<table id="tabel-input">
-    <tr><td>ID Buku</td><td><input value="<?= $data['idbuku']; ?>" type="text" readonly></td></tr>
-    <tr><td>Judul</td><td><input value="<?= $data['judulbuku']; ?>" type="text" name="judulbuku"></td></tr>
-    <tr><td>Kategori</td><td><input value="<?= $data['kategori']; ?>" type="text" name="kategori"></td></tr>
-    <tr><td>Pengarang</td><td><input value="<?= $data['pengarang']; ?>" type="text" name="pengarang"></td></tr>
-    <tr><td>Penerbit</td><td><input value="<?= $data['penerbit']; ?>" type="text" name="penerbit"></td></tr>
-    <tr>
-        <td>Status</td>
-        <td>
-            <select name="status">
-                <option <?= $data['status']=="Tersedia"?"selected":""; ?>>Tersedia</option>
-                <option <?= $data['status']=="Dipinjam"?"selected":""; ?>>Dipinjam</option>
-            </select>
-        </td>
-    </tr>
-</table>
+    <?php
+        $id_buku = $_GET['id'];
+        $q_tampil_buku = mysqli_query($db, "SELECT * FROM tbbuku WHERE idbuku = '$id_buku'");
+        $r_tampil_buku = mysqli_fetch_array($q_tampil_buku);
+    ?>
 
-<input type="submit" name="edit" value="Simpan Perubahan" class="tombol">
-</form>
+    <div class="chaos-form-container">
+        <!-- KASIH ID KE FORM: id="formEditBuku" -->
+        <form id="formEditBuku" action="proses/buku-edit-proses.php" method="post">
+        
+            <div class="form-group">
+                <label>ID Buku</label>
+                <input type="text" name="id_buku" value="<?php echo $r_tampil_buku['idbuku']; ?>" readonly class="isian-formulir" style="background: #222; color: #888;">
+            </div>
 
-<?php
-if(isset($_POST['edit'])){
-    mysqli_query($db, "UPDATE tbbuku SET
-        judulbuku='$_POST[judulbuku]',
-        kategori='$_POST[kategori]',
-        pengarang='$_POST[pengarang]',
-        penerbit='$_POST[penerbit]',
-        status='$_POST[status]'
-    WHERE idbuku='$id'");
+            <div class="form-group">
+                <label>Judul Buku</label>
+                <input type="text" name="judul_buku" value="<?php echo $r_tampil_buku['judulbuku']; ?>" class="isian-formulir" required>
+            </div>
 
-    echo "<script>alert('Data berhasil diperbarui'); document.location='index.php?p=buku';</script>";
-}
-?>
+            <div class="form-group">
+                <label>Kategori</label>
+                <select name="kategori" class="isian-formulir">
+                    <option value="Ilmu Komputer" <?php if($r_tampil_buku['kategori'] == 'Ilmu Komputer') echo 'selected'; ?>>Ilmu Komputer</option>
+                    <option value="Ilmu Agama" <?php if($r_tampil_buku['kategori'] == 'Ilmu Agama') echo 'selected'; ?>>Ilmu Agama</option>
+                    <option value="Karya Sastra" <?php if($r_tampil_buku['kategori'] == 'Karya Sastra') echo 'selected'; ?>>Karya Sastra</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Pengarang</label>
+                <input type="text" name="pengarang" value="<?php echo $r_tampil_buku['pengarang']; ?>" class="isian-formulir" required>
+            </div>
+
+            <div class="form-group">
+                <label>Penerbit</label>
+                <input type="text" name="penerbit" value="<?php echo $r_tampil_buku['penerbit']; ?>" class="isian-formulir" required>
+            </div>
+
+            <div class="form-group" style="margin-top: 30px;">
+                <!-- PASANG ONCLICK DISINI -->
+                <input type="submit" name="simpan" value="SIMPAN PERUBAHAN" 
+                       class="tombol" style="width: 100%; padding: 15px; font-weight: bold;"
+                       onclick="konfirmasiSimpan(event, 'formEditBuku')">
+            </div>
+
+        </form>
+    </div>
 </div>
