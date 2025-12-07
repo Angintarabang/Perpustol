@@ -1,56 +1,82 @@
-<?php
-include "koneksi.php";
-
-// ambil data denda
-$q = mysqli_query($db, "SELECT * FROM tbdenda WHERE id_setting = 1");
-$data = mysqli_fetch_array($q);
-?>
-
 <div id="label-page"><h3>Edit Pengaturan Denda</h3></div>
 
 <div id="content">
+    <?php
+        $sql = "SELECT * FROM tbdenda WHERE id_setting = 1";
+        $query = mysqli_query($db, $sql);
+        $r = mysqli_fetch_array($query);
+    ?>
 
-<form method="post">
-<table id="tabel-input">
+    <!-- FORM GLASS ESTETIK -->
+    <div class="chaos-form-container" style="max-width: 600px;">
+        <form action="index.php?p=denda-edit" method="post">
+            
+            <div class="form-group">
+                <label>Nominal Denda Per Hari (Rp)</label>
+                <input type="number" name="denda_per_hari" value="<?php echo $r['denda_per_hari']; ?>" class="isian-formulir">
+            </div>
 
-    <tr>
-        <td>Denda Per Hari</td>
-        <td><input type="number" name="denda_per_hari"
-                   value="<?= $data['denda_per_hari']; ?>" required></td>
-    </tr>
+            <div class="form-group">
+                <label>Maksimal Lama Pinjam (Hari)</label>
+                <input type="number" name="maks_hari_pinjam" value="<?php echo $r['maks_hari_pinjam']; ?>" class="isian-formulir">
+            </div>
 
-    <tr>
-        <td>Maksimal Hari Pinjam</td>
-        <td><input type="number" name="maks_hari_pinjam"
-                   value="<?= $data['maks_hari_pinjam']; ?>" required></td>
-    </tr>
+            <div class="form-group">
+                <label>Maksimal Denda (Capping) (Rp)</label>
+                <input type="number" name="maks_denda" value="<?php echo $r['maks_denda']; ?>" class="isian-formulir">
+                <small style="color: #888; font-style: italic;">*Denda tidak akan melebihi angka ini walaupun telat bertahun-tahun.</small>
+            </div>
 
-    <tr>
-        <td>Maksimal Denda</td>
-        <td><input type="number" name="maks_denda"
-                   value="<?= $data['maks_denda']; ?>" required></td>
-    </tr>
+            <div class="form-group" style="margin-top: 30px;">
+                <input type="submit" name="simpan" value="SIMPAN PERUBAHAN" class="tombol" style="width: 100%; padding: 15px; font-weight: bold; font-size: 1.1em;">
+            </div>
 
-</table>
-
-<br>
-
-<input type="submit" name="simpan" value="Simpan Perubahan" class="tombol">
-
-</form>
+        </form>
+    </div>
+</div>
 
 <?php
-if (isset($_POST['simpan'])) {
+// PROSES UPDATE (Langsung di file ini biar simpel)
+// ... kode form di atas tetap ...
 
-    mysqli_query($db, "UPDATE tbdenda SET
-        denda_per_hari = '$_POST[denda_per_hari]',
-        maks_hari_pinjam = '$_POST[maks_hari_pinjam]',
-        maks_denda = '$_POST[maks_denda]'
-        WHERE id_setting = 1
-    ");
+// PROSES UPDATE DENGAN SWEETALERT
+if(isset($_POST['simpan'])){
+    $denda_per_hari = $_POST['denda_per_hari'];
+    $maks_hari_pinjam = $_POST['maks_hari_pinjam'];
+    $maks_denda = $_POST['maks_denda'];
 
-    echo "<script>alert('Pengaturan berhasil diperbarui!'); document.location='index.php?p=denda';</script>";
+    $sql_update = "UPDATE tbdenda SET 
+                   denda_per_hari='$denda_per_hari', 
+                   maks_hari_pinjam='$maks_hari_pinjam', 
+                   maks_denda='$maks_denda' 
+                   WHERE id_setting=1";
+    
+    $query_update = mysqli_query($db, $sql_update);
+
+    if($query_update){
+        echo "<script>
+            Swal.fire({
+                title: 'BERHASIL!',
+                text: 'Aturan Denda Chaos Library Telah Diperbarui.',
+                icon: 'success',
+                background: '#121212',
+                color: '#fff',
+                confirmButtonColor: '#ffda47',
+                confirmButtonText: 'Sip, Lanjut!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location = 'index.php?p=denda';
+                }
+            });
+        </script>";
+    } else {
+        echo "<script>
+            Swal.fire({
+                title: 'GAGAL!',
+                text: 'Sistem menolak perubahan.',
+                icon: 'error'
+            });
+        </script>";
+    }
 }
 ?>
-
-</div>

@@ -1,135 +1,98 @@
 <?php
 include "../koneksi.php";
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>Laporan Data Buku</title>
-
-<style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 25px;
-    color: #000;
-}
-
-/* Header */
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.header h2 {
-    margin: 0;
-    font-size: 20px;
-    text-transform: uppercase;
-}
-
-.header p {
-    margin: 2px;
-    font-size: 12px;
-}
-
-/* Garis tebal */
-.line {
-    border-bottom: 2px solid #000;
-    margin: 15px 0;
-}
-
-/* Tabel */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-table, th, td {
-    border: 1px solid #000;
-}
-
-th {
-    background: #eaeaea;
-    font-size: 13px;
-    padding: 8px;
-}
-
-td {
-    font-size: 12px;
-    padding: 6px;
-}
-
-/* Footer */
-.footer {
-    margin-top: 40px;
-    width: 100%;
-    font-size: 12px;
-}
-
-.footer .ttd {
-    float: right;
-    text-align: center;
-    margin-right: 40px;
-}
-
-/* Print setting */
-@media print {
-    body {
-        margin: 0;
-    }
-
-    .no-print {
-        display: none;
-    }
-}
-</style>
+    <title>Cetak Data Buku - Chaos Library</title>
+    <style type="text/css">
+        /* Reset CSS khusus Print */
+        body { 
+            font-family: 'Times New Roman', serif; 
+            font-size: 12pt; 
+            color: #000;
+        }
+        
+        h3 { 
+            text-align: center; 
+            text-transform: uppercase; 
+            margin-bottom: 5px;
+            font-size: 16pt;
+        }
+        
+        p { 
+            text-align: center; 
+            margin-top: 0; 
+            font-size: 10pt; 
+            font-style: italic;
+        }
+        
+        /* Tabel Garis Tegas (Excel Style) */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        table, th, td {
+            border: 1px solid black;
+        }
+        
+        th {
+            background-color: #e0e0e0 !important; /* Abu muda saat print */
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            -webkit-print-color-adjust: exact; /* Paksa warna background keluar */
+        }
+        
+        td {
+            padding: 5px 8px;
+            vertical-align: middle;
+        }
+        
+        .center { text-align: center; }
+    </style>
 </head>
-
 <body>
 
-<div class="header">
-    <h2>PERPUSTAKAAN UMUM</h2>
-    <p>Jl. Lembah Abang No 11, Telp: (021) 5555555</p>
-    <div class="line"></div>
-    <h3>LAPORAN DATA BUKU</h3>
-</div>
+    <h3>Laporan Data Buku Perpustakaan Chaos Yohanes</h3>
+    <p>Dicetak pada tanggal: <?php echo date("d F Y"); ?></p>
 
-<table>
-    <tr>
-        <th width="10%">ID Buku</th>
-        <th width="25%">Judul Buku</th>
-        <th width="15%">Kategori</th>
-        <th width="15%">Pengarang</th>
-        <th width="15%">Penerbit</th>
-        <th width="10%">Status</th>
-    </tr>
+    <table>
+        <thead>
+            <tr>
+                <th width="5%">No</th>
+                <th>ID Buku</th>
+                <th>Judul Buku</th>
+                <th>Kategori</th>
+                <th>Pengarang</th>
+                <th>Penerbit</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $sql = "SELECT * FROM tbbuku ORDER BY idbuku ASC";
+            $query = mysqli_query($db, $sql);
+            $nomor = 1;
+            while($r = mysqli_fetch_array($query)){
+            ?>
+            <tr>
+                <td class="center"><?php echo $nomor++; ?></td>
+                <td class="center"><?php echo $r['idbuku']; ?></td>
+                <td><?php echo $r['judulbuku']; ?></td>
+                <td><?php echo $r['kategori']; ?></td>
+                <td><?php echo $r['pengarang']; ?></td>
+                <td><?php echo $r['penerbit']; ?></td>
+                <td class="center"><?php echo $r['status']; ?></td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
 
-    <?php
-    $data = mysqli_query($db, "SELECT * FROM tbbuku ORDER BY idbuku ASC");
-    while ($row = mysqli_fetch_array($data)) {
-    ?>
-    <tr>
-        <td><?= $row['idbuku']; ?></td>
-        <td><?= $row['judulbuku']; ?></td>
-        <td><?= $row['kategori']; ?></td>
-        <td><?= $row['pengarang']; ?></td>
-        <td><?= $row['penerbit']; ?></td>
-        <td><?= $row['status']; ?></td>
-    </tr>
-    <?php } ?>
-</table>
-
-<div class="footer">
-    <div class="ttd">
-        <p>Palangkaraya, ............ 20....</p>
-        <br><br><br>
-        <p><u><b>Kepala Perpustakaan</b></u></p>
-    </div>
-</div>
-
-<script>
-window.print();
-</script>
-
+    <script>
+        window.print();
+    </script>
 </body>
 </html>

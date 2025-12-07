@@ -11,6 +11,8 @@ include "koneksi.php";
 <html>
 <head>
 	<title>Perpustakaan Chaos Yohanes</title>
+	<!-- SweetAlert2 CDN (Wajib ada) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Font Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,19 +22,16 @@ include "koneksi.php";
 <body>
 	<div id="container">
 		<div id="header">
-            <!-- LOGO LAMA DIHAPUS, DIGANTI JUDUL SAJA -->
-			<div id="nama-alamat-perpustakaan-container">
+			<div id="nama-alamat-perpustakaan-container" style="width: 100%; text-align: center;">
 				<div class="nama-alamat-perpustakaan">
 					<h1> PERPUSTAKAAN CHAOS YOHANES </h1>
-                    <!-- ALAMAT LAMA SUDAH DIHAPUS -->
 				</div>
 			</div>
 		</div>
 
 		<div id="header2">
 			<div id="nama-user">
-                <!-- NAMA ANDI DIHAPUS, GANTI JADI STATUS ADMIN -->
-                Status: Administrator Mode
+                STATUS: ADMINISTRATOR MODE
             </div>
 		</div>
 
@@ -73,10 +72,63 @@ include "koneksi.php";
 			?>
 		</div>
 		
-        <!-- FOOTER -->
 		<div id="footer">
-            © <?php echo date('Y'); ?> Perpustakaan Chaos Yohanes - Developed by The Chaos Team
+            © <?php echo date('Y'); ?> Perpustakaan Chaos Yohanes - System by Chaos Team
         </div>
 	</div>
+
+    <!-- SCRIPT ALERT HAPUS (GLOBAL CHAOS THEME) - TARUH DISINI PALING BAWAH -->
+    <script>
+        function konfirmasiHapus(event, urlHapus, namaData) {
+            event.preventDefault(); // Tahan dulu biar gak langsung pindah halaman
+
+            Swal.fire({
+                title: 'HAPUS DATA?',
+                text: "Yakin mau menghapus " + namaData + "? Data yang hilang tidak bisa kembali!",
+                icon: 'warning',
+                background: '#121212', // Hitam
+                color: '#f0f0f0',      // Putih
+                showCancelButton: true,
+                confirmButtonColor: '#d33', // Merah buat hapus
+                cancelButtonColor: '#333',  // Abu buat batal
+                confirmButtonText: 'YA, MUSNAHKAN!',
+                cancelButtonText: 'BATAL'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = urlHapus; // Kalau Ya, baru pindah ke link hapus
+                }
+            })
+        }
+    </script>
+	<script>
+/* --- TAMBAHAN: ALERT KONFIRMASI SIMPAN (CHAOS THEME) --- */
+function konfirmasiSimpan(event, idForm) {
+    event.preventDefault(); // Tahan dulu, jangan langsung kirim
+    const form = document.getElementById(idForm);
+
+    // Cek apakah input wajib (required) sudah diisi?
+    if(!form.checkValidity()) {
+        form.reportValidity(); // Kalau belum, munculin bubble error bawaan browser
+        return;
+    }
+
+    Swal.fire({
+        title: 'SIMPAN PERUBAHAN?',
+        text: "Pastikan data yang anda masukkan sudah benar.",
+        icon: 'question',
+        background: '#121212', // Hitam
+        color: '#f0f0f0',      // Putih
+        showCancelButton: true,
+        confirmButtonColor: '#b8860b', // Emas Gelap
+        cancelButtonColor: '#333',     // Abu
+        confirmButtonText: 'YA, SIMPAN!',
+        cancelButtonText: 'BATAL'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit(); // Kalau Yes, baru kirim data ke server
+        }
+    })
+}
+</script>
 </body>
 </html>

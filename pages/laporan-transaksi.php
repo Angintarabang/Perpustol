@@ -88,7 +88,7 @@ mysqli_query($db, $hitung_denda_query);
                     <td style="padding-top: 15px;">
                         <input type="submit" value="Terapkan Filter" class="tombol">
                         <a href="index.php?p=laporan-transaksi" class="tombol" style="background: #333; border: 1px solid #555;">Reset</a>
-                        <a href="cetak/cetak-laporan-transaksi.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="tombol" style="background: linear-gradient(135deg, #eee, #ccc); color: #000;">Cetak Laporan</a>
+                        <a href="pages/cetak-laporan-transaksi.php?<?php echo http_build_query($_GET); ?>" target="_blank" class="tombol" style="background: linear-gradient(135deg, #eee, #ccc); color: #000;">Cetak Laporan</a>
                     </td>
                 </tr>
             </table>

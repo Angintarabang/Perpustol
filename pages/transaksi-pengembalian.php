@@ -6,32 +6,27 @@ include "koneksi.php";
 
 <div id="content">
 
-    <!-- Tombol Tambah -->
     <div class="tombol-tambah-container" style="margin-bottom: 20px;">
         <a href="index.php?p=transaksi-pengembalian-input" class="tombol">Tambah Pengembalian</a>
     </div>
 
-    <!-- WRAPPER BIAR AMAN & FULL WIDTH -->
     <div style="overflow-x: auto; width: 100%;">
-        
-        <!-- PAKSA WIDTH 100% DISINI -->
         <table id="tabel-tampil" style="width: 100%; min-width: 100%;">
             <thead>
                 <tr>
                     <th style="width: 5%;">No</th>
                     <th>ID Kembali</th>
                     <th>ID Transaksi</th>
-                    <th style="width: 20%;">Anggota</th>
-                    <th style="width: 25%;">Buku</th>
-                    <th style="width: 20%;">Detail Tanggal</th>
-                    <th style="width: 15%;">Denda & Status</th>
-                    <th style="width: 10%;">Opsi</th>
+                    <th>Anggota</th>
+                    <th>Buku</th>
+                    <th>Detail Tanggal</th>
+                    <th>Denda & Status</th>
+                    <th>Opsi</th>
                 </tr>
             </thead>
             <tbody>
 
             <?php
-            // QUERY MANTAP - Mengambil data pengembalian dengan detail lengkap
             $sql = "SELECT 
                         p.*, 
                         a.nama as nama_anggota, 
@@ -46,25 +41,48 @@ include "koneksi.php";
 
             $query = mysqli_query($db, $sql);
 
+            // Ambil Limit Denda
+            $q_limit = mysqli_fetch_array(mysqli_query($db, "SELECT maks_denda, denda_per_hari FROM tbdenda LIMIT 1"));
+            $limit_maksimal = $q_limit['maks_denda'];
+            $tarif_harian = $q_limit['denda_per_hari'];
+
             if(mysqli_num_rows($query) > 0) {
                 $nomor = 1;
-
                 while ($data = mysqli_fetch_array($query)) {
-                    $tgl_rencana = $data['tgl_rencana'];
-                    $tgl_kembali_nyata = $data['tglkembali'];
                     
+                    // Hitung Ulang Telat (Buat Display)
                     $telat = 0;
-                    if (strtotime($tgl_kembali_nyata) > strtotime($tgl_rencana)) {
-                        $telat = floor((strtotime($tgl_kembali_nyata) - strtotime($tgl_rencana)) / (60*60*24));
+                    $time_rencana = strtotime($data['tgl_rencana']);
+                    $time_nyata = strtotime($data['tglkembali']);
+                    
+                    if ($time_nyata > $time_rencana) {
+                        $selisih = $time_nyata - $time_rencana;
+                        $telat = floor($selisih / (60 * 60 * 24)); 
                     }
 
-                    // Warna Chaos Neon
-                    $warna_denda = ($data['denda'] > 0) ? '#ff4d4d' : '#00ff80'; // Merah Neon vs Hijau Neon
-                    $teks_denda = ($data['denda'] > 0) ? 'Terlambat' : 'Tepat Waktu';
+                    // Logika Capping Visual (Biar di tabel tetep keliatan max 100jt walau data lama error)
+                    $denda_display = $data['denda'];
+                    if($denda_display > $limit_maksimal){
+                        $denda_display = $limit_maksimal; 
+                    }
+
+                    // Warna Warni
+                    if ($telat > 0) {
+                        $status_text = "Telat: " . $telat . " Hari";
+                        $color_style = "color: #ff4d4d;";
+                    } else {
+                        $status_text = "Tepat Waktu";
+                        $color_style = "color: #00ff80;";
+                    }
             ?>
             <tr>
                 <td style="text-align: center;"><?= $nomor++; ?></td>
-                <td style="text-align: center;"><?= htmlspecialchars($data['idpengembalian']); ?></td>
+                
+                <!-- ID KEMBALI (AUTO INCREMENT) -->
+                <td style="text-align: center; font-weight: bold; color: var(--gold-primary);">
+                    #<?= $data['idpengembalian']; ?>
+                </td>
+
                 <td style="text-align: center;"><?= htmlspecialchars($data['idtransaksi']); ?></td>
                 <td>
                     <div style="font-weight: bold; color: var(--gold-primary);"><?= htmlspecialchars($data['idanggota']); ?></div>
@@ -75,31 +93,29 @@ include "koneksi.php";
                     <?= htmlspecialchars($data['judulbuku']); ?>
                 </td>
                 <td style="font-size: 0.9em;">
-                    Pinjam: <span style="color: #ccc;"><?= htmlspecialchars($data['tglpinjam']); ?></span><br>
-                    Rencana: <span style="color: #999; font-style: italic;"><?= htmlspecialchars($tgl_rencana); ?></span><br>
-                    Nyata: <strong style="color: #fff; border-bottom: 1px solid #555;"><?= htmlspecialchars($tgl_kembali_nyata); ?></strong>
+                    Pinjam: <span style="color: #ccc;"><?= $data['tglpinjam']; ?></span><br>
+                    Rencana: <span style="color: #ffff00; font-style: italic;"><?= $data['tgl_rencana']; ?></span><br>
+                    Nyata: <strong style="color: #fff; border-bottom: 1px solid #777;"><?= $data['tglkembali']; ?></strong>
                 </td>
-                <td style="color: <?= $warna_denda; ?>; font-weight: bold;">
-                    <div style="margin-bottom: 3px;"><?= $teks_denda; ?>: <?= $telat; ?> hari</div>
-                    Rp <?= number_format($data['denda'], 0, ',', '.'); ?>
+                <td style="<?= $color_style; ?> font-weight: bold;">
+                    <div style="margin-bottom: 3px;"><?= $status_text; ?></div>
+                    Rp <?= number_format($denda_display, 0, ',', '.'); ?>
                 </td>
                 <td style="text-align: center;">
-                    <a class="tombol" 
-                       style="background: linear-gradient(135deg, #500000, #300000); color: #ffcccc; padding: 8px 15px; font-size: 0.8em;"
-                       href="pages/transaksi-pengembalian-hapus.php?id=<?= $data['idpengembalian']; ?>" 
-                       onclick="return confirm('Hapus data pengembalian ini? Warning: Data akan hilang permanen dari sistem.')">
-                       HAPUS
-                    </a>
+                    <a href="#" 
+   onclick="konfirmasiHapus(event, 'proses/transaksi-pengembalian-hapus.php?id=<?= $data['idpengembalian']; ?>', 'Data Pengembalian #<?= $data['idpengembalian']; ?>')"
+   class="tombol" style="background: linear-gradient(135deg, #500000, #300000); color: #ffcccc; padding: 8px 15px; font-size: 0.8em;">
+   HAPUS
+</a>
                 </td>
             </tr>
             <?php 
                 }
             } else {
-                echo "<tr><td colspan='8' style='text-align:center; padding:30px; font-style: italic; color: #777;'>Belum ada riwayat pengembalian buku.</td></tr>";
-            }
+                echo "<tr><td colspan='8' style='text-align:center; padding:30px; font-style: italic; color: #ccc;'>Belum ada riwayat pengembalian.</td></tr>";
+            } 
             ?>
             </tbody>
         </table>
     </div>
-
 </div>
