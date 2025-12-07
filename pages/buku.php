@@ -10,7 +10,7 @@
             <a href="index.php?p=buku-input" class="tombol">Tambah Buku</a>
             
             <!-- Tombol Print Icon -->
-            <a target="_blank" href="pages/cetak_buku.php"> <!-- Sesuaikan nama file cetak lu -->
+            <a target="_blank" href="pages/buku-cetak.php"> <!-- Sesuaikan nama file cetak lu -->
                 <img src="print.png" alt="Cetak" style="height: 40px; width: auto; vertical-align: middle; margin-left: 5px;">
             </a>
         </div>
