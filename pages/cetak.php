@@ -6,37 +6,51 @@ include "../koneksi.php";
 <head>
     <title>Cetak Data Anggota - Chaos Library</title>
     <style type="text/css">
-        body { font-family: Arial, sans-serif; }
-        h3 { text-align: center; text-transform: uppercase; margin-bottom: 5px; }
-        p { text-align: center; margin-top: 0; font-size: 12px; color: #555; }
-        
-        table {
-            border-collapse: collapse; /* BIAR GARIS NYAMBUNG RAPI */
-            width: 100%;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th {
-            background-color: #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        td {
-            padding: 8px;
-            vertical-align: middle;
-        }
-        .center { text-align: center; }
-        
-        /* Foto agar pas di kertas */
-        .foto-cetak {
-            width: 50px; 
-            height: 50px; 
-            object-fit: cover; 
-            border-radius: 50%;
-            border: 1px solid #333;
-        }
+       /* --- CSS SAKTI BUAT CETAK --- */
+body { 
+    font-family: 'Times New Roman', serif; 
+    font-size: 11pt; /* Ukuran font standar */
+    -webkit-print-color-adjust: exact; /* Chrome/Edge */
+    print-color-adjust: exact; /* Firefox */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Biar garis nyatu */
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid black; /* Garis hitam tegas */
+}
+
+th {
+    background-color: #ddd !important; /* Paksa warna abu keluar */
+    font-weight: bold;
+    text-align: center; /* Judul Kolom Rata Tengah */
+    padding: 10px;
+}
+
+td {
+    padding: 8px;
+    text-align: center; /* ISI TABEL RATA TENGAH SEMUA */
+    vertical-align: middle;
+}
+
+/* Khusus kolom Nama/Judul biar rata kiri aja (opsional, kalau mau tengah semua hapus ini) */
+/* td:nth-child(3) { text-align: left; padding-left: 10px; } */
+
+h3, p { text-align: center; margin: 5px 0; }
+/* TAMBAHAN WAJIB BIAR FOTO GAK RAKSASA */
+.foto-cetak {
+    width: 60px;       /* Lebar Foto Pas */
+    height: 60px;      /* Tinggi Foto Pas */
+    object-fit: cover; /* Biar foto gak gepeng */
+    border-radius: 5px; /* Biar gak tajem sudutnya */
+    border: 1px solid #000;
+    display: block;
+    margin: 0 auto;    /* Tengahin foto */
+}
     </style>
 </head>
 <body>
