@@ -1,5 +1,4 @@
 <?php
-// Pastikan tidak ada karakter lain sebelum tag <html>
 session_start();
 if(isset($_SESSION['user'])) {
     // Jika sudah login, redirect ke halaman utama

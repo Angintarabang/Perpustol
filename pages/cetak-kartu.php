@@ -15,139 +15,162 @@ if(empty($r_tampil_anggota['foto']) || !file_exists($foto)) {
 <head>
     <title>Kartu Anggota - <?php echo $r_tampil_anggota['nama']; ?></title>
     <style>
-        /* RESET & PRINT SETTINGS */
+        /* RESET KHUSUS CETAK */
         body { 
-            margin: 0; padding: 0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f0f0; /* Background layar abu biar kartu kelihatan */
-            -webkit-print-color-adjust: exact;
+            margin: 0; padding: 20px; 
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff;
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact; 
         }
         
-        /* CARD CONTAINER (UKURAN ID CARD STANDAR: 8.6cm x 5.4cm) */
+        /* CONTAINER KARTU (UKURAN KTP: 8.6cm x 5.4cm) */
         .id-card {
             width: 8.6cm;
             height: 5.4cm;
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            background: #111; /* Hitam Pekat */
+            border: 2px solid #ffd700; /* Border Emas */
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
             position: relative;
             overflow: hidden;
             color: #fff;
-            margin: 50px auto; /* Tengah di layar */
-            border: 1px solid #ffd700; /* Border Emas */
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Shadow cuma buat preview di layar */
         }
 
-        /* WATERMARK / PATTERN BACKGROUND */
-        .id-card::before {
-            content: 'CHAOS LIBRARY';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 2em;
-            color: rgba(255, 215, 0, 0.05);
-            font-weight: 900;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-
-        /* HEADER KARTU */
+        /* HEADER EMAS */
         .header {
-            background: linear-gradient(90deg, #ffd700, #b8860b);
-            height: 1.2cm;
+            background: linear-gradient(90deg, #b8860b, #ffd700);
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-bottom: 1px solid #fff;
         }
         .header h2 {
             margin: 0;
             color: #000;
-            font-size: 10pt;
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 800;
         }
 
         /* ISI KARTU */
         .content {
+            flex: 1;
             display: flex;
-            padding: 10px;
-            height: calc(100% - 1.2cm);
             align-items: center;
+            padding: 10px 15px;
+            background-image: linear-gradient(45deg, #1a1a1a 25%, #000 25%, #000 50%, #1a1a1a 50%, #1a1a1a 75%, #000 75%, #000 100%);
+            background-size: 20px 20px; /* Pattern Background */
         }
 
-        /* FOTO */
+        /* FOTO KIRI */
         .photo-area {
-            width: 2.5cm;
-            height: 3cm;
-            background: #fff;
+            width: 80px;
+            height: 100px;
             border: 2px solid #ffd700;
             border-radius: 5px;
             overflow: hidden;
             margin-right: 15px;
+            background: #fff;
         }
         .photo-area img {
             width: 100%; height: 100%; object-fit: cover;
         }
 
-        /* DATA DIRI */
+        /* DATA KANAN */
         .data-area {
             flex: 1;
-            font-size: 8pt;
-            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        .data-row {
+
+        .label {
+            color: #888;
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 2px;
         }
-        .label {
-            color: #aaa;
-            font-size: 7pt;
-            display: block;
-        }
+        
         .value {
+            font-size: 11px;
             font-weight: bold;
             color: #fff;
-            font-size: 9pt;
+            margin-bottom: 8px;
             text-transform: uppercase;
+            border-bottom: 1px solid #444;
+            padding-bottom: 2px;
+            display: inline-block;
+            width: 100%;
         }
+
+        /* NOMOR ID SPESIAL */
         .id-number {
             color: #ffd700;
-            font-size: 10pt;
-            margin-bottom: 5px;
-            display: block;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
             letter-spacing: 1px;
         }
 
-        /* STYLE KHUSUS PRINT */
+        /* WATERMARK */
+        .watermark {
+            position: absolute;
+            bottom: 5px; right: 10px;
+            font-size: 8px;
+            color: #444;
+            font-style: italic;
+        }
+
+        /* CSS PRINT: HILANGKAN MARGIN/SHADOW SAAT DICETAK */
         @media print {
-            body { background: none; margin: 0; }
-            .id-card { margin: 0; box-shadow: none; page-break-inside: avoid; }
+            body { margin: 0; padding: 0; }
+            .id-card { 
+                box-shadow: none; 
+                margin: 0; 
+                page-break-inside: avoid;
+                -webkit-print-color-adjust: exact; 
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="id-card">
+        <!-- HEADER -->
         <div class="header">
-            <h2>MEMBER CARD</h2>
+            <h2>CHAOS MEMBER</h2>
         </div>
+
+        <!-- ISI -->
         <div class="content">
+            <!-- FOTO -->
             <div class="photo-area">
                 <img src="<?php echo $foto; ?>" onerror="this.src='../images/avatar-default.png'">
             </div>
+
+            <!-- DATA -->
             <div class="data-area">
-                <span class="label">ID MEMBER</span>
-                <span class="value id-number"><?php echo $r_tampil_anggota['idanggota']; ?></span>
                 
-                <div class="data-row">
-                    <span class="label">NAMA LENGKAP</span>
-                    <span class="value"><?php echo $r_tampil_anggota['nama']; ?></span>
-                </div>
-                <div class="data-row">
-                    <span class="label">ALAMAT</span>
-                    <span class="value" style="font-size: 7pt;"><?php echo substr($r_tampil_anggota['alamat'], 0, 30); ?></span>
-                </div>
+                <span class="label">ID Member</span>
+                <span class="value id-number"><?php echo $r_tampil_anggota['idanggota']; ?></span>
+
+                <span class="label">Nama Lengkap</span>
+                <span class="value"><?php echo $r_tampil_anggota['nama']; ?></span>
+
+                <span class="label">Alamat</span>
+                <span class="value" style="border: none; margin-bottom: 0;">
+                    <?php echo substr($r_tampil_anggota['alamat'], 0, 25); ?>...
+                </span>
+
             </div>
         </div>
+        
+        <div class="watermark">Valid Member of Chaos Library</div>
     </div>
 
     <script>

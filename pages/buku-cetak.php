@@ -6,52 +6,41 @@ include "../koneksi.php";
 <head>
     <title>Cetak Data Buku - Chaos Library</title>
     <style type="text/css">
-        /* Reset CSS khusus Print */
-        body { 
-            font-family: 'Times New Roman', serif; 
-            font-size: 12pt; 
-            color: #000;
-        }
-        
-        h3 { 
-            text-align: center; 
-            text-transform: uppercase; 
-            margin-bottom: 5px;
-            font-size: 16pt;
-        }
-        
-        p { 
-            text-align: center; 
-            margin-top: 0; 
-            font-size: 10pt; 
-            font-style: italic;
-        }
-        
-        /* Tabel Garis Tegas (Excel Style) */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
-        
-        table, th, td {
-            border: 1px solid black;
-        }
-        
-        th {
-            background-color: #e0e0e0 !important; /* Abu muda saat print */
-            padding: 8px;
-            text-align: center;
-            font-weight: bold;
-            -webkit-print-color-adjust: exact; /* Paksa warna background keluar */
-        }
-        
-        td {
-            padding: 5px 8px;
-            vertical-align: middle;
-        }
-        
-        .center { text-align: center; }
+        /* --- CSS SAKTI BUAT CETAK --- */
+body { 
+    font-family: 'Times New Roman', serif; 
+    font-size: 11pt; /* Ukuran font standar */
+    -webkit-print-color-adjust: exact; /* Chrome/Edge */
+    print-color-adjust: exact; /* Firefox */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Biar garis nyatu */
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid black; /* Garis hitam tegas */
+}
+
+th {
+    background-color: #ddd !important; /* Paksa warna abu keluar */
+    font-weight: bold;
+    text-align: center; /* Judul Kolom Rata Tengah */
+    padding: 10px;
+}
+
+td {
+    padding: 8px;
+    text-align: center; /* ISI TABEL RATA TENGAH SEMUA */
+    vertical-align: middle;
+}
+
+/* Khusus kolom Nama/Judul biar rata kiri aja (opsional, kalau mau tengah semua hapus ini) */
+/* td:nth-child(3) { text-align: left; padding-left: 10px; } */
+
+h3, p { text-align: center; margin: 5px 0; }
     </style>
 </head>
 <body>

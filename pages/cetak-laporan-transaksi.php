@@ -6,14 +6,40 @@ include "../koneksi.php";
 <head>
     <title>Laporan Transaksi - Chaos Library</title>
     <style>
-        body { font-family: 'Times New Roman', serif; font-size: 12pt; }
-        h3 { text-align: center; text-transform: uppercase; margin-bottom: 5px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        table, th, td { border: 1px solid black; }
-        th { background-color: #ddd; padding: 5px; text-align: center; }
-        td { padding: 5px; font-size: 11pt; }
-        .center { text-align: center; }
-    </style>
+        /* --- CSS SAKTI BUAT CETAK --- */
+        body { 
+            font-family: 'Times New Roman', serif; 
+            font-size: 11pt; 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact; 
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse; 
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black; 
+        }
+
+        th {
+            background-color: #ddd !important; 
+            font-weight: bold;
+            text-align: center; 
+            padding: 10px;
+        }
+
+        td {
+            padding: 8px;
+            text-align: center; 
+            vertical-align: middle;
+        }
+
+        h3, p { text-align: center; margin: 5px 0; }
+        
+    </style> <!-- <--- INI DIA YANG TADI ILANG BRO! -->
 </head>
 <body>
 
